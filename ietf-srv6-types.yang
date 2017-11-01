@@ -59,7 +59,7 @@ module ietf-srv6-types {
 
   reference "RFC XXXX";
 
-  revision 2017-11-01 {
+  revision 2017-11-11 {
     description
       "Initial revision.";
     reference
@@ -69,60 +69,69 @@ module ietf-srv6-types {
   // TODO: Special opcode
 
   typedef srv6-end-types {
+        
     type enumeration {
       /* draft-filsfils-spring-srv6-network-programming */ 
-      enum "End";
-      enum "End.X";
-      enum "End.T";
-      enum "End.B6";
-      enum "End.B6.Encaps";
-      enum "End.BM";
-      enum "End.DT4";
-      enum "End.DX4";
-      enum "End.DT6";
-      enum "End.DX6";
-      enum "End.DT46";
-      enum "End.DX2";
-      enum "End.DX2V";
-      enum "End.DT2U";
-      enum "End.DT2M";
-      enum "End.S";
+      enum End { value 1; description "End";  }
+      enum End.X { description "End.X"; } 
+      enum End.T { description "End.T"; } 
+      enum End.B6 { description "End.B6"; } 
+      enum End.B6.Encaps { description "End.B6.Encaps"; } 
+      enum End.BM { description "End.BM"; } 
+      enum End.DT4 { description "End.DT4"; } 
+      enum End.DX4 { description "End.DX4"; } 
+      enum End.DT6 { description "End.DT6"; } 
+      enum End.DX6 { description "End.DX6"; } 
+      enum End.DT46 { description "End.DT46"; } 
+      enum End.DX2 { description "End.DX2"; } 
+      enum End.DX2V { description "End.DX2V"; } 
+      enum End.DT2U { description "End.DT2U"; } 
+      enum End.DT2M { description "End.DT2M"; } 
+      enum End.S { description "End.S"; } 
 
       /* draft-clad-spring-segment-routing-service-chaining */ 
-      enum "End.AS2";
-      enum "End.AS4";
-      enum "End.AS6";
-      enum "End.AD";
+      enum End.AS2 { description "End.AS2"; } 
+      enum End.AS4 { description "End.AS4"; } 
+      enum End.AS6 { description "End.AS6"; } 
+      enum End.AD { description "End.AD"; } 
     }
+    
+    description "SRv6 End behavior types";
   }
 
   typedef srv6-transit-types {
     type enumeration {
       /* draft-filsfils-spring-srv6-network-programming */ 
-      enum "T";
-      enum "T.Encaps";
-      enum "T.Insert";
-      enum "T.Encaps.L2";
+      enum "T" { value 1; description "Transit"; }
+      enum "T.Encaps" { description "T.Encaps"; }
+      enum "T.Insert" { description "T.Insert"; }
+      enum "T.Encaps.L2" { description "T.Encaps.L2"; }
     }
+    
+    description "SRv6 Transit behavior types";
   }
 
   typedef srv6-security-rule-types {
     type enumeration {
       /* draft-filsfils-spring-srv6-network-programming */ 
-      enum "SEC1";
-      enum "SEC2";
-      enum "SEC3";
-      enum "SEC4";
+      enum "SEC1" { value 1; description "SEC1"; }
+      enum "SEC2" { description "SEC2"; }
+      enum "SEC3" { description "SEC3"; }
+      enum "SEC4" { description "SEC4"; }
     }
+    
+    description "SRv6 Security rule types";
   }
 
   typedef srv6-counter-types {
     type enumeration {
       /* draft-filsfils-spring-srv6-network-programming */ 
-      enum "CNT0";
-      enum "CNT1";
-      enum "CNT2";
+      enum "CNT0" { value 0; description "CNT0"; }
+      enum "CNT1" { description "CNT1"; }
+      enum "CNT2" { description "CNT2"; }
     }
+
+    description "SRv6 counter types";
   }
   
   typedef srv6-sid {
@@ -148,11 +157,24 @@ module ietf-srv6-types {
 
   typedef srv6-func-opcode-unreserved {
       type uint32 {
-        range "64 .. 63";
+        range "64 .. max";
       }
       
       description
         "This is a typedef for SID FUNC's allocatable (unreserved) opcode type";
+  }
+
+  typedef srv6-func-opcode-reserved-type {
+      type enumeration {
+        enum invalid {  value 0; description "Invalid opcode"; }
+	enum default-end-psp {  value 1;
+	                        description "Opcode for Default End/PSP funcion"; }
+	enum default-end-usp {  value 2;
+	                        description "Opcode for Default End/USP funcion"; }
+	// TODO enum wildcard { value ~0; description "Opcode for Wildcard/mass operations"; }
+      }
+     
+      description "SRv6 SID FUNC Reserved Opcodes";
   }
   
   typedef srv6-locator-len {

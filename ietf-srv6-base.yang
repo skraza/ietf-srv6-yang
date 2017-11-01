@@ -67,7 +67,7 @@ module ietf-srv6-base {
 
   reference "RFC XXXX";
 
-  revision 2017-11-01 {
+  revision 2017-11-11 {
     description
       "Initial revision.";
     reference
@@ -97,6 +97,11 @@ module ietf-srv6-base {
           type boolean;
           description "Enable a SRv6 locator";
         }
+        leaf is-default {
+          type boolean;
+          description "Indicates if the locator is a default locator";
+        }
+
         container prefix {
           description "Specify locator prefix value";
           leaf address {
