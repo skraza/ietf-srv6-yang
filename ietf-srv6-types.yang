@@ -1,0 +1,176 @@
+module ietf-srv6-types {
+
+  namespace "urn:ietf:params:xml:ns:yang:ietf-srv6-types";
+  prefix srv6-types;
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+
+  //import ietf-segment-routing-common {
+  //  prefix sr-cmn;
+  // }
+  
+  organization
+    "IETF SPRING Working Group";
+  contact
+    "WG Web:   <http://tools.ietf.org/wg/spring/>
+     WG List:  <mailto:spring@ietf.org>
+
+     WG Chair: Bruno Decraene
+               <mailto:loa@pi.nu>
+
+     WG Chair: Martin Vigoureux 
+               <mailto:rcallon@juniper.net>
+
+     Editor:   Kamran Raza
+               <mailto:skraza@cisco.com>
+
+     Editor:   Jaganbabu Rajamanickam
+               <maito:jrajaman@cisco.com>
+
+     Editor:   Xufeng Liu
+               <mailto:Xufeng_Liu@jabil.com>
+
+     Editor:   Iftekhar Hussain
+               <mailto:IHussain@infinera.com>
+
+     Editor:   Himanshu Shah
+               <mailto:hshah@ciena.com>
+
+     Editor:   Daniel Voyer
+               <mailto:daniel.voyerbell.ca>
+
+     ";
+	      
+  description
+    "This YANG module defines the essential types for the
+     management of Segment-Routing with IPv6 dataplane (SRv6).
+
+     Copyright (c) 2017 IETF Trust and the persons identified as
+     authors of the code.  All rights reserved.
+
+     Redistribution and use in source and binary forms, with or
+     without modification, is permitted pursuant to, and subject
+     to the license terms contained in, the Simplified BSD License
+     set forth in Section 4.c of the IETF Trust's Legal Provisions
+     Relating to IETF Documents
+     (http://trustee.ietf.org/license-info).";
+
+  reference "RFC XXXX";
+
+  revision 2017-11-01 {
+    description
+      "Initial revision.";
+    reference
+      "RFC XXXX: YANG Data Model for SRv6";
+  }
+
+  // TODO: Special opcode
+
+  typedef srv6-end-types {
+    type enumeration {
+      /* draft-filsfils-spring-srv6-network-programming */ 
+      enum "End";
+      enum "End.X";
+      enum "End.T";
+      enum "End.B6";
+      enum "End.B6.Encaps";
+      enum "End.BM";
+      enum "End.DT4";
+      enum "End.DX4";
+      enum "End.DT6";
+      enum "End.DX6";
+      enum "End.DT46";
+      enum "End.DX2";
+      enum "End.DX2V";
+      enum "End.DT2U";
+      enum "End.DT2M";
+      enum "End.S";
+
+      /* draft-clad-spring-segment-routing-service-chaining */ 
+      enum "End.AS2";
+      enum "End.AS4";
+      enum "End.AS6";
+      enum "End.AD";
+    }
+  }
+
+  typedef srv6-transit-types {
+    type enumeration {
+      /* draft-filsfils-spring-srv6-network-programming */ 
+      enum "T";
+      enum "T.Encaps";
+      enum "T.Insert";
+      enum "T.Encaps.L2";
+    }
+  }
+
+  typedef srv6-security-rule-types {
+    type enumeration {
+      /* draft-filsfils-spring-srv6-network-programming */ 
+      enum "SEC1";
+      enum "SEC2";
+      enum "SEC3";
+      enum "SEC4";
+    }
+  }
+
+  typedef srv6-counter-types {
+    type enumeration {
+      /* draft-filsfils-spring-srv6-network-programming */ 
+      enum "CNT0";
+      enum "CNT1";
+      enum "CNT2";
+    }
+  }
+  
+  typedef srv6-sid {
+      type inet:ipv6-prefix;
+      description
+      "This type defines a SID value in SRv6";
+  }
+  
+  typedef srv6-func-opcode {
+      type uint32;
+      description
+        "This is a typedef for SID FUNC's opcode type";
+  }
+
+  typedef srv6-func-opcode-reserved {
+      type uint32 {
+        range "1 .. 63";
+      }
+      
+      description
+        "This is a typedef for SID FUNC's reserved opcode type";
+  }
+
+  typedef srv6-func-opcode-unreserved {
+      type uint32 {
+        range "64 .. 63";
+      }
+      
+      description
+        "This is a typedef for SID FUNC's allocatable (unreserved) opcode type";
+  }
+  
+  typedef srv6-locator-len {
+      type uint8 {
+        range "32 .. 96";
+      }
+      description
+         "This type defines an SRv6 locator len with range constraints";
+  }
+
+  typedef srv6-sid-pfxlen {
+      type uint8 {
+        range "33 .. 128";
+      }
+      default 128;
+      description
+      "This type defines a SID prefixlen with range constraints";
+  }
+
+} // module
+
