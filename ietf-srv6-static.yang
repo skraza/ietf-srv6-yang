@@ -2,11 +2,23 @@ module ietf-srv6-static {
 
   namespace "urn:ietf:params:xml:ns:yang:ietf-srv6-static";
   prefix srv6-static;
-  
+
+  import ietf-interfaces {
+    prefix "if";
+  }
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+
   import ietf-routing {
     prefix "rt";
   }
-  
+
+  import ietf-routing-types {
+     prefix "rt-types";
+  }
+   
   import ietf-srv6-types {
     prefix srv6-types;
   }
@@ -75,35 +87,533 @@ module ietf-srv6-static {
   * Config and State
   */
 
- augment "/rt:routing/srv6:srv6/srv6:locators/srv6:locator" {
-     description
-      "This augments locator leaf withing SRv6.";
-       
-   container static {
-    description "Static SRv6";
 
-      container local-sids {
-        description "Local-SIDs";
+ grouping path-attrs-cmn {
+     description 
+       "Path properties -common for v4/v6";
 
-        list end-function {
-          key "opcode todo";
-          description "Local-SID function";
+     leaf interface {
+       type if:interface-ref;
+       description "The outgoing interface";
+     }
+     
+     leaf weight {
+       type uint16;
+       description
+         "This value is used to compute a loadshare to perform un-equal
+          load balancing when multiple outgoing path(s) are specified. A
+          share is computed as a ratio of this number to the total under
+          all configured path(s).";
+     }
 
-          leaf opcode {
-            type srv6-types:srv6-func-opcode-unreserved;
-            description "SID function opcode value";
-          }
-	  leaf todo {
-	     type string;
-	     description "TODO";
-	  }
-	  leaf pfxlen {
-	     type srv6-types:srv6-sid-pfxlen;
-	     description "SID prefixlen";
-	  }
+     leaf role {
+       type enumeration {
+         enum PRIMARY { description "Path as primary traffic carrying"; }
+         enum BACKUP { description "Path acts as a backup"; }
+         enum PRIMARY_AND_BACKUP { description
+	            "Path acts as primary and backup simultaneously"; }
+        }
+	 description "The path role";
+      }
+
+      leaf backup-path-index {
+       type uint8;
+       description "Index of the protecting (backup) path";
+      }
+   }
+   
+  grouping path-attrs-v6 {
+     description 
+       "IPv6 Path properties";
+     
+     leaf next-hop {
+       type inet:ipv6-address;
+       description "The IP address of the next-hop";
+     }
+
+    uses path-attrs-cmn;
+  }
+   
+  grouping path-attrs-v4 {
+     description 
+       "IPv4 Path properties";
+     
+     leaf next-hop {
+       type inet:ipv4-address;
+       description "The IP address of the next-hop";
+     }
+
+    uses path-attrs-cmn;
+  }
+
+  grouping path-out-sids {
+    description "Grouping for path's SID stack";
+    container sid-stack {
+      description "Path's SID stack";
+      list out-sid {
+        key "sid";
+	description "Out SID";
+
+        leaf sid {
+  	  type srv6-types:srv6-sid;
+	  description "SID value";
 	}
       }
     }
+  }
+  
+  grouping path-out-labels {
+    description "Grouping for path's label stack";
+    container label-stack {
+      description "Path's label stack";
+      list out-label {
+        key "label";
+	description "Out label";
+
+        leaf label {
+  	  type rt-types:mpls-label;
+	  description "Label value";
+	}
+      }
+    }
+  }
+  
+  grouping path-attrs-mpls {
+     description 
+       "MPLS Path properties";
+     
+     leaf next-hop {
+       type inet:ip-address;
+       description "The IP address of the next-hop";
+     }
+
+    uses path-attrs-cmn;
+  }
+  
+  grouping multi-paths-v6 {
+    description "Multipath grouping";
+    
+    container paths {
+      description "List of outgoing paths";
+      list path {
+        key path-index;
+        description "The list of paths associated with the SID";
+
+        leaf path-index {
+          type uint8;
+          description "Index of the path";
+        }
+
+        uses path-attrs-v6;
+        uses path-out-sids;
+        }
+      }
+   }
+
+  grouping multi-paths-v4 {
+    description "Multipath grouping";
+    
+    container paths {
+      description "List of outgoing paths";
+      list path {
+        key path-index;
+        description "The list of paths associated with the SID";
+
+        leaf path-index {
+          type uint8;
+          description "Index of the path";
+        }
+
+        uses path-attrs-v4;
+        uses path-out-sids;
+        }
+      }
+   }
+
+  grouping multi-paths-mpls {
+    description "Multipath grouping";
+    
+    container paths {
+      description "List of outgoing paths";
+      list path {
+        key path-index;
+        description "The list of paths associated with the SID";
+
+        leaf path-index {
+          type uint8;
+          description "Index of the path";
+        }
+
+        uses path-attrs-mpls;
+        uses path-out-labels;
+        }
+      }
+   }
+
+  grouping srv6-sid-config {
+    description
+      "Configuration parameters relating to SRv6 sid.";
+
+    leaf opcode {
+      type srv6-types:srv6-func-opcode-unreserved;
+      description
+        "SRv6 function opcode.";
+    }
+    leaf end-behaviour-type {
+      type srv6-types:srv6-end-type;
+      mandatory true;
+      description
+        "Type of SRv6 end behaviour.";
+    }
+    
+    container end {
+      when "../srv6-end-behaviour-type = 'End'" {
+        description
+          "This container is valid only when the user chooses End
+           behaviour.";
+      }
+      description
+        "The Endpoint function is the most basic function. 
+         FIB lookup on updated DA and forward accordingly 
+         to the matched entry. 
+         This is the SRv6 instantiation of a Prefix SID.";
+	 
+        leaf usp {
+          type boolean;
+	  default false;
+          description
+            "Ultimate SRH poping. Default is PSP";
+        }
+    }
+
+    container end-t {
+      when "../srv6-end-behaviour-type = 'End.T'" {
+        description
+          "This container is valid only when the user chooses
+           End.T behaviour.";
+      }
+      description
+        "Endpoint with specific IPv6 table lookup. 
+         Lookup the next segment in IPv6 table T 
+         associated with the SID and forward viai
+         the matched table entry.
+         The End.T is used for multi-table operation 
+         in the core.";
+       leaf usp {
+          type boolean;
+	  default false;
+          description
+            "Ultimate SRH poping. Default is PSP";
+        }
+	
+        leaf lookup-table {
+          type srv6-types:table-id;
+	  mandatory true;	  
+          description
+            "Table Id for lookup on updated DA (next segment)";
+        }
+    }
+    
+    container end-x {
+      when "../srv6-end-behaviour-type = 'End.X'" {
+        description
+          "This container is valid only when the user chooses 
+           End.X behaviour.";
+      }
+      description
+        "Endpoint with cross-connect to an array of 
+         layer-3 adjacencies.
+         Forward to layer-3 adjacency bound to the SID S.
+         The End.X function is required to express any 
+         traffic-engineering policy.";
+      leaf usp {
+        type boolean;
+	default false;
+        description
+          "Ultimate SRH poping. Default is PSP";
+      }
+
+      uses multi-paths-v6;
+    }
+
+
+   container end-dx4 {
+      when "../srv6-end-behaviour-type = 'End.DX4'" {
+        description
+          "This container is valid only when the user chooses 
+           End.DX4 behaviour.";
+      }
+      description
+        "Endpoint with decapsulation and cross-connect to 
+         an array of IPv4 adjacencies.
+         Pop the (outer) IPv6 header and its extension
+         header and forward to layer-3 adjacency bound 
+         to the SID S. 
+         This would be equivalent to the per-CE VPN 
+         label in MPLS.";
+
+      uses multi-paths-v4;
+    }
+    container end-dx6 {
+      when "../srv6-end-behaviour-type = 'End.DX6'" {
+        description
+          "This container is valid only when the user chooses 
+           End.DX6 behaviour.";
+      }
+      description
+        "Endpoint with decapsulation and cross-connect to 
+         an array of IPv6 adjacencies. Pop the (outer) 
+         IPv6 header and its extension headers and forward 
+         to layer-3 adjacency bound to the SID S. 
+         The End.DX6 used in the L3VPN use-case.";
+      
+      uses multi-paths-v6;
+    }
+   container end-dt4 {
+      when "../srv6-end-behaviour-type = 'End.DT4'" {
+        description
+          "This container is valid only when the user chooses 
+           End.DT4 behaviour.";
+      }
+      description
+        "Endpoint with decapsulation and specific 
+         IPv4 table lookup. 
+         Pop the (outer) IPv6 header and its extension 
+         headers. 
+         Lookup the exposed inner IPv4 DA in IPv4 
+         table T and forward via the matched table entry. 
+         This would be equivalent to the per-VRF VPN label 
+         in MPLS.";
+      leaf lookup-table {
+        type srv6-types:table-id;
+	mandatory true;
+        description "Egress VRF name.";
+      }
+    }
+    container end-dt6 {
+      when "../srv6-end-behaviour-type = 'End.DT6'" {
+        description
+          "This container is valid only when the user chooses 
+           End.DT6 behaviour.";
+      }
+      description
+        "Endpoint with decapsulation and specific IPv6 table 
+         lookup. 
+         Pop the (outer) IPv6 header and its extension 
+         headers. 
+         Lookup the exposed inner IPv6 DA in IPv6 
+         table T and forward via the matched table entry. 
+         End.DT6 function is used in L3VPN use-case.";
+      leaf lookup-table {
+        type srv6-types:table-id;
+        mandatory true;
+        description "Egress VRF name.";
+      }
+    }
+    container end-dt46 {
+      when "../srv6-end-behaviour-type = 'End.DT46'" {
+        description
+          "This container is valid only when the user chooses 
+           End.DT46 behaviour.";
+      }
+      description
+        "Endpoint with decapsulation and specific 
+         IP table lookup. 
+         Depending on the protocol type (IPv4 or IPv6) 
+         of the inner ip packet and the specific VRF name 
+         forward the packet.
+         This would be equivalent to the per-VRF VPN 
+         label in MPLS.";
+      leaf lookup-table {
+        type srv6-types:table-id;
+	mandatory true;
+        description "Egress VRF name.";
+      }
+    }
+    container end-b6 {
+      when "../srv6-end-behaviour-type = 'End.B6'" {
+        description
+          "This container is valid only when the user chooses 
+           End.B6 behaviour.";
+      }
+      description
+        "Endpoint bound to an SRv6 Policy. 
+         Insert SRH based on the policy and forward the 
+         packet toward the first hop configured in the policy. 
+         This is the SRv6 instantiation of a Binding SID.";
+      leaf policy-name {
+        type string;
+        mandatory true;
+        description "SRv6 policy name.";
+      }
+
+      uses multi-paths-v6;
+    }
+    container end-b6-encaps {
+      when "../srv6-end-behaviour-type = 'End.B6.Encaps'" {
+        description
+          "This container is valid only when the user chooses 
+           End_B6_Encaps behaviour.";
+      }
+      description
+        "This is a variation of the End.B6 behavior where 
+         the SRv6 Policy also includes an IPv6 Source 
+         Address.
+         Insert SRH based on the policy and update the 
+         source IP and forward the packet toward the 
+         first hop configured in the policy.
+         Instead of simply inserting an SRH with the 
+         policy (End.B6), this behavior also adds an 
+         outer IPv6 header.";
+      leaf policy-name {
+        type string;
+        mandatory true;
+        description "SRv6 policy name.";
+      }
+      leaf source-address {
+        type inet:ipv6-address;
+        mandatory true;
+        description
+          "IPv6 source address for Encap.";
+      }
+
+      uses multi-paths-v6;      
+    }
+    container end-bm {
+      when "../srv6-end-behaviour-type = 'End.BM'" {
+        description
+          "This container is valid only when the user chooses 
+           End.BM behaviour.";
+      }
+      description
+        "Endpoint bound to an SR-MPLS Policy. 
+         push an MPLS label stack <L1, L2, L3> on the 
+         received packet and forward the according to 
+         Lable L1. 
+         This is an SRv6 instantiation of a SR-MPLS Binding SID.";
+      leaf policy-name {
+        type string;
+	mandatory true;
+        description "SRv6 policy name";
+      }
+      uses multi-paths-mpls;
+    }
+
+   container end-dx2 {
+      when "../srv6-end-behaviour-type = 'End.DX2'" {
+        description
+          "This container is valid only when the user chooses
+           End.DX2 behaviour.";
+      }
+      description
+        "This is a Endpoint with decapsulation and Layer-2 
+         cross-connect to OIF.
+         Pop the (outer) IPv6 header and its extension headers.
+         Forward the resulting frame via OIF associated to the SID.
+         The End.DX2 function is the L2VPN use-case";
+	 
+	 container paths {
+           description "List of outgoing paths";
+       
+            leaf interface {
+              type if:interface-ref;
+	      mandatory true;
+             description "Layer-2 cross-connect to Out interface.";
+            }
+	}
+    }
+/* TODO    
+    container end-dx2v {
+      when "../srv6-end-behaviour-type = 'End.DX2V'" {
+        description
+          "This container is valid only when the user chooses
+           End.DX2V behaviour.";
+      }
+      description
+        "Endpoint with decapsulation and specific VLAN 
+         L2 table lookup. 
+         Pop the (outer) IPv6 header 
+         and its extension headers lookup the exposed 
+         inner VLANs in L2 table T forward via the 
+         matched table entry.
+         The End.DX2V is used for EVPN Flexible cross-connect 
+         use-cases"; 
+        leaf end-dx2v {
+          type empty;
+          description
+            "End_DX2V behaviour";
+        }
+    }
+    container end-dt2u {
+      when "../srv6-end-behaviour-type = 'End.DT2U'" {
+        description
+          "This container is valid only when the user chooses
+           End.DT2U behaviour.";
+      }
+      description
+        "Endpoint with decapsulation and specific 
+         unicast MAC L2 table lookup. 
+         Pop the (outer) IPv6 header and its extension headers.
+         Learn the exposed inner MAC SA in L2 table T. 
+         Lookup the exposed inner MAC DA in L2 table T. 
+         Forward via the matched T entry else to all L2OIF in T.
+         The End.DT2U is used for EVPN Bridging unicast use cases"; 
+        leaf end-dt2u {
+          type empty;
+          description
+            "End_DT2U behaviour";
+        }
+    }
+    container end-dt2m {
+      when "../srv6-end-behaviour-type = 'End.DT2M'" {
+        description
+          "This container is valid only when the user chooses
+           End.DT2M behaviour.";
+      }
+      description
+        "Endpoint with decapsulation and specific L2 table flooding. 
+         Pop the (outer) IPv6 header and its extension headers. 
+         Learn the exposed inner MAC SA in L2 table T. 
+         Forward on all L2OIF excluding the one specified in Arg.FE2.
+         The End.DT2M is used for EVPN Bridging BUM use case with 
+         ESI filtering capability.";
+        leaf end-dt2m {
+          type empty;
+          description
+            "End_DT2M behaviour";
+        }
+    }
+*/
+  }
+
+  grouping srv6-static-cfg {
+    description
+      "Grouping configuration and operation for SRv6 sid.";
+	   
+      list sid {
+        key "opcode";
+	description "Local SID list";
+	
+        uses srv6-sid-config;
+      }
+  }
+    
+ augment "/rt:routing/srv6:srv6/srv6:locators/srv6:locator" {
+     description
+      "This augments locator leaf withing SRv6.";
+
+   container static {
+    description "Static SRv6";
+
+    /* Local SIDs */ 
+    container local-sids {
+      description 
+           "SRv6-static local-SIDs";
+	   
+      uses srv6-static-cfg;
+      /* no state for now; SID state accessible through base model */
+   }
+   
+  }
  }
 } // module
-

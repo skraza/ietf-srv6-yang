@@ -7,10 +7,6 @@ module ietf-srv6-types {
     prefix inet;
   }
 
-  //import ietf-segment-routing-common {
-  //  prefix sr-cmn;
-  // }
-  
   organization
     "IETF SPRING Working Group";
   contact
@@ -39,7 +35,7 @@ module ietf-srv6-types {
                <mailto:hshah@ciena.com>
 
      Editor:   Daniel Voyer
-               <mailto:daniel.voyerbell.ca>
+               <mailto:daniel.voyer@bell.ca>
 
      ";
 	      
@@ -68,67 +64,151 @@ module ietf-srv6-types {
 
   // TODO: Special opcode
 
-  typedef srv6-end-types {
-        
+  typedef srv6-end-type {
+
     type enumeration {
-      /* draft-filsfils-spring-srv6-network-programming */ 
-      enum End { value 1; description "End";  }
-      enum End.X { description "End.X"; } 
-      enum End.T { description "End.T"; } 
-      enum End.B6 { description "End.B6"; } 
-      enum End.B6.Encaps { description "End.B6.Encaps"; } 
-      enum End.BM { description "End.BM"; } 
-      enum End.DT4 { description "End.DT4"; } 
-      enum End.DX4 { description "End.DX4"; } 
-      enum End.DT6 { description "End.DT6"; } 
-      enum End.DX6 { description "End.DX6"; } 
-      enum End.DT46 { description "End.DT46"; } 
-      enum End.DX2 { description "End.DX2"; } 
-      enum End.DX2V { description "End.DX2V"; } 
-      enum End.DT2U { description "End.DT2U"; } 
-      enum End.DT2M { description "End.DT2M"; } 
-      enum End.S { description "End.S"; } 
+      /* draft-filsfils-spring-srv6-network-programming */
+
+      enum End {
+        value 1;
+        description
+          "The Endpoint function. This is the most 
+           basic function";
+      }
+      enum End.X {
+        description
+          "Endpoint with cross-connect to an array 
+           of layer-3 adjacencies";
+      }
+      enum End.T {
+        description
+          "Endpoint with specific IPv6 table lookup";
+      }
+      enum End.DX2 {
+        description
+          "Endpoint with decapsulation and Layer-2 
+           cross-connect to an L2 interface";
+      }
+      enum End.DX2V {
+        description
+          "Endpoint with decapsulation and specific 
+           VLAN L2 table lookup";
+      }
+      enum End.DT2U {
+        description
+          "Endpoint with decapsulation and specific 
+           unicast MAC L2 table lookup";
+      }
+      enum End.DT2M {
+        description
+          "Endpoint with decapsulation and specific L2 table 
+           flooding";
+      }
+      enum End.DX6 {
+        description
+          "Endpoint with decapsulation and cross-connect 
+           to an array of IPv6 adjacencies";
+      }
+      enum End.DX4 {
+        description
+          "Endpoint with decapsulation and cross-connect
+           to an array of IPv4 adjacencies";
+      }
+      enum End.DT6 {
+        description
+          "Endpoint with decapsulation and specific 
+           IPv6 table lookup";
+      }
+      enum End.DT4 {
+        description
+          "Endpoint with decapsulation and specific 
+           IPv4 table lookup";
+      }
+      enum End.DT46 {
+        description
+          "Endpoint with decapsulation and specific IP 
+           (IPv4 or IPv6) table lookup";
+      }
+      enum End.B6 {
+        description
+          "Endpoint bound to an SRv6 Policy";
+      }
+      enum End.B6.Encaps {
+        description
+          "This is a variation of the End.B6 behavior 
+           where the SRv6 Policy also includes an 
+           IPv6 Source Address A.";
+      }
+      enum End.BM {
+        description
+          "Endpoint bound to an SR-MPLS Policy";
+      }
+    
+      enum End.S {
+         description
+	    "Endpoint in search of a target in table TE";
+      } 
 
       /* draft-clad-spring-segment-routing-service-chaining */ 
-      enum End.AS2 { description "End.AS2"; } 
-      enum End.AS4 { description "End.AS4"; } 
-      enum End.AS6 { description "End.AS6"; } 
-      enum End.AD { description "End.AD"; } 
+      enum End.AS2 {
+          description
+	     "SFC Static proxy for inner type Ethernet";
+      } 
+      enum End.AS4 {
+          description
+	     "SFC Static proxy for inner type IPv4";
+      }
+      enum End.AS6 {
+          description
+	     "SFC Static proxy for inner type IPv6";
+      }
+      enum End.AD {
+          description
+	     "SFC Dynamic proxy";
+      }
+      enum End.ASM {
+          description
+	     "SFC Shared memory SR proxy";
+      }
+      enum End.AM {
+          description
+	     "SFC Masquerading SR proxy";
+      }
     }
     
     description "SRv6 End behavior types";
   }
 
-  typedef srv6-transit-types {
+  typedef srv6-transit-type {
     type enumeration {
       /* draft-filsfils-spring-srv6-network-programming */ 
-      enum "T" { value 1; description "Transit"; }
-      enum "T.Encaps" { description "T.Encaps"; }
-      enum "T.Insert" { description "T.Insert"; }
-      enum "T.Encaps.L2" { description "T.Encaps.L2"; }
+      enum T { value 1; description "Transit"; }
+      enum T.Encaps { description "T.Encaps"; }
+      enum T.Insert { description "T.Insert"; }
+      enum T.Encaps.L2 { description "T.Encaps.L2"; }
     }
     
     description "SRv6 Transit behavior types";
   }
 
-  typedef srv6-security-rule-types {
+  typedef srv6-security-rule-type {
     type enumeration {
       /* draft-filsfils-spring-srv6-network-programming */ 
-      enum "SEC1" { value 1; description "SEC1"; }
-      enum "SEC2" { description "SEC2"; }
-      enum "SEC3" { description "SEC3"; }
-      enum "SEC4" { description "SEC4"; }
+      enum SEC1 { value 1; description "Security rule SEC1"; }
+      enum SEC2 { description "Security rule SEC2"; }
+      enum SEC3 { description "Security rule SEC3"; }
+      enum SEC4 { description "Security rule SEC4"; }
     }
     
     description "SRv6 Security rule types";
   }
 
-  typedef srv6-counter-types {
+  typedef srv6-counter-type {
     type enumeration {
       /* draft-filsfils-spring-srv6-network-programming */ 
-      enum "CNT0" { value 0; description "CNT0"; }
-      enum "CNT1" { description "CNT1"; }
-      enum "CNT2" { description "CNT2"; }
+      enum CNT0 { value 0; description "CNT0"; }
+      enum CNT1 { description ""; }
+      enum CNT2 { description "CNT2"; }
     }
 
     description "SRv6 counter types";
@@ -194,5 +274,41 @@ module ietf-srv6-types {
       "This type defines a SID prefixlen with range constraints";
   }
 
+ typedef sid-alloc-type {
+    type enumeration {
+      enum Dynamic {
+        description
+          "SID allocated dynamically.";
+      }
+      enum Explicit {
+        description
+          "SID allocated with explicit (static) value";
+      }
+    }
+    description
+      "Types of sid allocation used.";
+  }
+
+  typedef srv6-sid-owner-type {
+    type enumeration {
+      enum isis { value 1; description "ISIS"; }
+      enum ospfv3 { description "OSPFv3"; }
+      enum bgp { description "BGP"; }
+      enum evpn { description "EVPN"; }
+      enum sr-policy { description "SR Policy"; }	    
+      enum sfc { description "SFC"; }
+      // TODO: Others
+    }
+    description
+      "SID Client types.";
+  }
+
+  // TODO: Rtg module ? 
+  typedef table-id {
+    type uint32;
+    description
+      "Routing Table Id";
+  }
+  
 } // module
 

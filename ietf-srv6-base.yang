@@ -77,7 +77,35 @@ module ietf-srv6-base {
  /*
   * Config and State
   */
- 
+  grouping srv6-encap {
+   description "Grouping for encap param config.";
+   
+   container encapsulation {
+      description "Configure encapsulation related parameters";
+      leaf source-address {
+        type inet:ipv6-address;
+        description "Configure a source address (for T.Encap)";
+      }
+    }
+  }
+
+  grouping srv6-locator-state {
+   description "SRv6 grouping Locastateor ";
+
+       leaf is-operational {
+         type boolean;
+	 config false;
+	 description "Indicates whether locator state is UP";
+       }
+
+       leaf is-in-address-conflict {
+         type boolean;
+	 config false;
+	 description "Indicates whether locator address conflicts with 
+	              some other IPv6 address on the box";
+       }
+    }
+  
   grouping srv6-locators {
    description "SRv6 locator grouping";
    
@@ -95,10 +123,12 @@ module ietf-srv6-base {
 
         leaf enable {
           type boolean;
+	  default false;
           description "Enable a SRv6 locator";
         }
         leaf is-default {
           type boolean;
+	  mandatory true;
           description "Indicates if the locator is a default locator";
         }
 
@@ -106,33 +136,68 @@ module ietf-srv6-base {
           description "Specify locator prefix value";
           leaf address {
             type inet:ipv6-address;
+	    mandatory true;
             description "IPv6 address";
           }
           leaf length {
             type srv6-types:srv6-locator-len;
+	    mandatory true;
             description "Locator (prefix) length";
           }
         }
+	uses srv6-locator-state;
       }
     }
   }
-  
-  grouping srv6-state-stats {
-   description "SRv6 Statistics grouping";
 
-   container counters {
+  grouping srv6-stats-in {
+    description "Grouping for inbound stats";
+
+      leaf in-pkts {
+        type yang:counter64;
+        description
+          "A cumulative counter of the total number of packets received";
+      }
+
+      leaf in-octets {
+        type yang:counter64;
+        description
+          "A cumulative counter of the total bytes received.";
+      }
+  }
+
+  grouping srv6-stats-out {
+    description "Grouping for inbound stats";
+
+      leaf out-pkts {
+        type yang:counter64;
+        description
+          "A cumulative counter of the total number of packets transmitted";
+      }
+
+      leaf out-octets {
+        type yang:counter64;
+        description
+          "A cumulative counter of the total bytes transmitted.";
+      }
+  }
+  
+  grouping srv6-state-sid {
+   description "SRv6 SID state grouping";
+
+   container local-sids {
      config false;
-     description "SRv6 counters";
+     description "Local-SID state";
 
-     container global {
-       description "SRv6 global counters";
-  
-       leaf cnt0 {
-         type yang:counter64;
-         description "Counts SRv6 traffic received/dropped on local prefix not instantiated as local-SID"; 
-       }
-     }
-
+     container counters {
+         description "SRv6 counters";
+   
+         container cnt0 {
+           description "Counts SRv6 traffic received/dropped on local prefix not instantiated as local-SID";
+	   uses srv6-stats-in;
+	 }
+     }   
+   
      list local-sid {
        key "sid";
        description "Per-localSID Counters";
@@ -142,13 +207,45 @@ module ietf-srv6-base {
 	description "Local SID value";
        }
 
-       leaf cnt1 {
-         type yang:counter64;
-         description "Counts SRv6 traffic received on local-SID prefix and processed successfully"; 
+       leaf alloc-type {
+        type srv6-types:sid-alloc-type;
+        description
+          "Type of sid allocation.";
        }
-     }
+
+       leaf is-installed {
+         type boolean;
+	 description "Indicates whether SID is installed in forwarding";
+       }
+       
+       list owner {
+         key "type instance";
+         description "SID Owner clients";
+	 leaf type {
+	   type srv6-types:srv6-sid-owner-type;
+	   description "SID owner/client type";
+	 }
+	 leaf instance {
+	   type string;
+	   description "Client instance";
+	 }
+	 leaf is-winner {
+	   type boolean;
+	   description "Is this client/owner the winning in terms of forwarding";
+         }
+       }
+       
+       container counters {
+         description "SRv6 per local-SID counters";
+   
+         container cnt1 {
+           description "Counts SRv6 traffic received on local-SID prefix and processed successfully";
+	   uses srv6-stats-in;
+	 }
+       }
     }
    }
+  }
 
   grouping srv6-support-ends {
     description "SRv6 End behavior support grouping";
@@ -158,7 +255,7 @@ module ietf-srv6-base {
      description "End behavior support";
      
      leaf type {
-       type srv6-types:srv6-end-types;
+       type srv6-types:srv6-end-type;
        description "End behavior (End*) type";
      }
      leaf supported {
@@ -176,7 +273,7 @@ module ietf-srv6-base {
      description "Transit behavior support";
      
      leaf type {
-       type srv6-types:srv6-transit-types;
+       type srv6-types:srv6-transit-type;
        description "Transit behavior (T*) type";
      }
      leaf supported {
@@ -230,7 +327,7 @@ module ietf-srv6-base {
      description "Security rule support";
      
      leaf type {
-       type srv6-types:srv6-security-rule-types;
+       type srv6-types:srv6-security-rule-type;
        description "Security rule type";
      }
      leaf supported {
@@ -248,7 +345,7 @@ module ietf-srv6-base {
      description "SRv6 counter support";
      
      leaf type {
-       type srv6-types:srv6-counter-types;
+       type srv6-types:srv6-counter-type;
        description "Counter type";
      }
      leaf supported {
@@ -280,24 +377,17 @@ module ietf-srv6-base {
    container srv6 {
     description "Segment Routing with IPv6 dataplane";
 
+    /* config */
     leaf enable {
       type boolean;
+      default false;
       description "Enable SRv6";
     }
 
-    container encapsulation {
-      description "Configure encapsulation related parameters";
-      leaf source-address {
-        type inet:ipv6-address;
-        description "Configure a source address (for T.Encap)";
-      }
-    }
-
+    uses srv6-encap;
     uses srv6-locators;
-
-    /* state */
-    uses srv6-state-capabilities;	
-    uses srv6-state-stats;
+    uses srv6-state-capabilities;
+    uses srv6-state-sid;
    }
  }
 } // module
