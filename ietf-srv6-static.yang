@@ -14,10 +14,6 @@ module ietf-srv6-static {
   import ietf-routing {
     prefix "rt";
   }
-
-  import ietf-routing-types {
-     prefix "rt-types";
-  }
    
   import ietf-srv6-types {
     prefix srv6-types;
@@ -87,107 +83,56 @@ module ietf-srv6-static {
   * Config and State
   */
 
-
- grouping path-attrs-cmn {
-     description 
-       "Path properties -common for v4/v6";
-
-     leaf interface {
-       type if:interface-ref;
-       description "The outgoing interface";
-     }
-     
-     leaf weight {
-       type uint16;
-       description
-         "This value is used to compute a loadshare to perform un-equal
-          load balancing when multiple outgoing path(s) are specified. A
-          share is computed as a ratio of this number to the total under
-          all configured path(s).";
-     }
-
-     leaf role {
-       type enumeration {
-         enum PRIMARY { description "Path as primary traffic carrying"; }
-         enum BACKUP { description "Path acts as a backup"; }
-         enum PRIMARY_AND_BACKUP { description
-	            "Path acts as primary and backup simultaneously"; }
-        }
-	 description "The path role";
-      }
-
-      leaf backup-path-index {
-       type uint8;
-       description "Index of the protecting (backup) path";
-      }
-   }
    
   grouping path-attrs-v6 {
      description 
        "IPv6 Path properties";
+
+     leaf interface {
+        type if:interface-ref;
+        description "The outgoing interface";
+     }
      
      leaf next-hop {
        type inet:ipv6-address;
        description "The IP address of the next-hop";
      }
-
-    uses path-attrs-cmn;
+	  
+    uses srv6:path-attrs-cmn;
   }
    
   grouping path-attrs-v4 {
      description 
        "IPv4 Path properties";
+
+     leaf interface {
+        type if:interface-ref;
+        description "The outgoing interface";
+     }
      
      leaf next-hop {
        type inet:ipv4-address;
        description "The IP address of the next-hop";
      }
 
-    uses path-attrs-cmn;
-  }
-
-  grouping path-out-sids {
-    description "Grouping for path's SID stack";
-    container sid-stack {
-      description "Path's SID stack";
-      list out-sid {
-        key "sid";
-	description "Out SID";
-
-        leaf sid {
-  	  type srv6-types:srv6-sid;
-	  description "SID value";
-	}
-      }
-    }
-  }
-  
-  grouping path-out-labels {
-    description "Grouping for path's label stack";
-    container label-stack {
-      description "Path's label stack";
-      list out-label {
-        key "label";
-	description "Out label";
-
-        leaf label {
-  	  type rt-types:mpls-label;
-	  description "Label value";
-	}
-      }
-    }
+    uses srv6:path-attrs-cmn;
   }
   
   grouping path-attrs-mpls {
      description 
        "MPLS Path properties";
+
+     leaf interface {
+        type if:interface-ref;
+        description "The outgoing interface";
+     }
      
      leaf next-hop {
        type inet:ip-address;
        description "The IP address of the next-hop";
      }
 
-    uses path-attrs-cmn;
+    uses srv6:path-attrs-cmn;
   }
   
   grouping multi-paths-v6 {
@@ -205,7 +150,7 @@ module ietf-srv6-static {
         }
 
         uses path-attrs-v6;
-        uses path-out-sids;
+        uses srv6:path-out-sids;
         }
       }
    }
@@ -225,7 +170,7 @@ module ietf-srv6-static {
         }
 
         uses path-attrs-v4;
-        uses path-out-sids;
+        uses srv6:path-out-sids;
         }
       }
    }
@@ -245,7 +190,7 @@ module ietf-srv6-static {
         }
 
         uses path-attrs-mpls;
-        uses path-out-labels;
+        uses srv6:path-out-labels;
         }
       }
    }

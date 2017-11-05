@@ -3,12 +3,20 @@ module ietf-srv6-base {
   namespace "urn:ietf:params:xml:ns:yang:ietf-srv6-base";
   prefix srv6;
 
+  import ietf-interfaces {
+    prefix "if";
+  }
+  
   import ietf-inet-types {
     prefix inet;
   }
 
   import ietf-yang-types {
     prefix "yang";
+  }
+
+  import ietf-routing-types {
+     prefix "rt-types";
   }
   
   import ietf-routing {
@@ -74,6 +82,71 @@ module ietf-srv6-base {
       "RFC XXXX: YANG Data Model for SRv6";
   }
 
+/*
+ * Common
+ */
+
+  grouping path-attrs-cmn {
+     description 
+       "Path properties -common for v4/v6";
+     
+     leaf weight {
+       type uint16;
+       description
+         "This value is used to compute a loadshare to perform un-equal
+          load balancing when multiple outgoing path(s) are specified. A
+          share is computed as a ratio of this number to the total under
+          all configured path(s).";
+     }
+
+     leaf role {
+       type enumeration {
+         enum PRIMARY { description "Path as primary traffic carrying"; }
+         enum BACKUP { description "Path acts as a backup"; }
+         enum PRIMARY_AND_BACKUP { description
+	            "Path acts as primary and backup simultaneously"; }
+        }
+	 description "The path role";
+      }
+
+      leaf backup-path-index {
+       type uint8;
+       description "Index of the protecting (backup) path";
+      }
+   }
+
+  grouping path-out-sids {
+    description "Grouping for path's SID stack";
+    container sid-stack {
+      description "Path's SID stack";
+      list out-sid {
+        key "sid";
+	description "Out SID";
+
+        leaf sid {
+  	  type srv6-types:srv6-sid;
+	  description "SID value";
+	}
+      }
+    }
+  }
+  
+  grouping path-out-labels {
+    description "Grouping for path's label stack";
+    container label-stack {
+      description "Path's label stack";
+      list out-label {
+        key "label";
+	description "Out label";
+
+        leaf label {
+  	  type rt-types:mpls-label;
+	  description "Label value";
+	}
+      }
+    }
+  }
+
  /*
   * Config and State
   */
@@ -92,8 +165,8 @@ module ietf-srv6-base {
   grouping srv6-locator-state {
    description "SRv6 grouping Locastateor ";
 
-       leaf is-operational {
-         type boolean;
+       leaf operational-status {
+         type srv6-types:srv6-status-type;
 	 config false;
 	 description "Indicates whether locator state is UP";
        }
@@ -181,6 +254,90 @@ module ietf-srv6-base {
           "A cumulative counter of the total bytes transmitted.";
       }
   }
+
+  grouping path-out-sids-choice {
+    description "Grouping for Out-SID choices";
+    choice dataplane-type {
+       description "Out-SID choices";
+       case srv6 {
+         uses path-out-sids;
+       }
+       case mpls {
+         uses path-out-labels;
+       }
+    }
+  }
+  
+  grouping local-sid-fwd-state {
+    description "SRv6 local-SID forwarding state grouping";
+
+    container forwarding {
+       description "SRv6 local-SID forwarding state";
+
+       leaf is-installed {
+         type boolean;
+	 description "Indicates whether SID is installed in forwarding";
+       }
+
+       leaf nexthop-type {
+         type srv6-types:srv6-nexthop-type;
+	 description "Forwarding nexthop types";
+       }
+       
+       container paths {
+         when "../is-installed = 'true'" {
+	   description "This container is valid only when the local-SID is installed 
+               in forwarding";
+         }
+
+         list path {
+          key path-index;
+          description "The list of paths associated with the SID";
+
+          leaf path-index {
+            type uint8;
+            description "Index of the path";
+          }
+
+          container l2 {
+	    when "../../nexthop-type == 'l2'" {
+	      description "This container is valid only for L2 type of NHs";
+	    }
+
+            leaf interface {
+              type if:interface-ref;
+               description "The outgoing Layer2 interface";
+            }
+	    
+            description "L2 information";
+	  }
+	  
+          container l3 {
+	    when "../../nexthop-type != 'l2'" {
+	      description "This container is valid only for L3 type of NHs";
+	    }
+
+            leaf interface {
+              type if:interface-ref;
+               description "The outgoing Layer3 interface";
+            }
+	    
+            leaf next-hop {
+              type inet:ip-address;
+              description "The IP address of the next-hop";
+            }
+     
+            uses path-attrs-cmn;
+  
+            description "L3 information";
+	  }
+	  uses path-out-sids-choice;	    
+        }
+	
+	description "Forwarding paths";
+       }
+    }
+  }
   
   grouping srv6-state-sid {
    description "SRv6 SID state grouping";
@@ -207,15 +364,15 @@ module ietf-srv6-base {
 	description "Local SID value";
        }
 
+       leaf end-behavior-type {
+           type srv6-types:srv6-end-type;
+           description "Type of SRv6 end behaviour.";
+       }
+       
        leaf alloc-type {
         type srv6-types:sid-alloc-type;
         description
           "Type of sid allocation.";
-       }
-
-       leaf is-installed {
-         type boolean;
-	 description "Indicates whether SID is installed in forwarding";
        }
        
        list owner {
@@ -234,7 +391,9 @@ module ietf-srv6-base {
 	   description "Is this client/owner the winning in terms of forwarding";
          }
        }
-       
+
+       uses local-sid-fwd-state;
+
        container counters {
          description "SRv6 per local-SID counters";
    
@@ -260,6 +419,7 @@ module ietf-srv6-base {
      }
      leaf supported {
        type boolean;
+       mandatory true;
        description "True if supported";
      }
     }
@@ -278,6 +438,7 @@ module ietf-srv6-base {
      }
      leaf supported {
        type boolean;
+       mandatory true;	    
        description "True if supported";
      }
     }
@@ -291,28 +452,33 @@ module ietf-srv6-base {
      
      leaf max-sl {
        type uint8;
+       //mandatory true;
        description "Maximum value of the SL field in the SRH of 
                     a received packet before applying the function 
                     associated with a SID";
      }
      leaf max-end-pop-srh {
        type uint8;
+       //mandatory true;
        description "Maximum number of SIDs in the top SRH in an 
                     SRH stack to which the router can apply 
                     PSP or USP flavors";
      }
      leaf max-t_insert {
        type uint8;
+       //mandatory true;
        description "Maximum number of SIDs that can be inserted as 
                    part of the T.insert behavior"; 
      }
      leaf max-t_encap {
        type uint8;
+       //mandatory true;
        description "Maximum number of SIDs that can be inserted as 
                     part of the T.Encap behavior"; 
      }
      leaf max-end_d {
        type uint8;
+       //mandatory true;
        description "Maximum number of SIDs in an SRH when applying 
                     End.DX6 and End.DT6 functions";
      }     
@@ -332,6 +498,7 @@ module ietf-srv6-base {
      }
      leaf supported {
        type boolean;
+       mandatory true;
        description "True if supported";
      }
     }
@@ -350,6 +517,7 @@ module ietf-srv6-base {
      }
      leaf supported {
        type boolean;
+       mandatory true;
        description "True if supported";
      }
     }
@@ -368,7 +536,6 @@ module ietf-srv6-base {
        uses srv6-support-counters;
      }
   }
-
 
   augment "/rt:routing" {
      description
@@ -390,5 +557,57 @@ module ietf-srv6-base {
     uses srv6-state-sid;
    }
  }
+
+ /* Notifications */
+
+  grouping srv6-locator-ref {
+    description
+      "An absolute reference to an SRv6 locator";
+    leaf locator-ref {
+      type leafref {
+        path "/rt:routing/srv6:srv6/srv6:locators/srv6:locator/srv6:name";
+      }
+      description
+        "Reference to a SRv6 locator.";
+    }
+  }
+
+  notification srv6-locator-status-event {
+    description
+      "Notification event for a change of SRv6 locator operational status.";
+    leaf operational-status {
+      type srv6-types:srv6-status-type;
+      description "Operational status";
+    }
+    uses srv6-locator-ref;
+  }
+
+  notification srv6-sid-collision-event {
+    description
+      "Notification event for a SRv6 SID collision - i.e. attempt to bind an already
+       bound SID to a new context";
+    leaf sid {
+      type srv6-types:srv6-sid;
+      description "SRv6 SID";
+    }
+    container existing {
+      description "Current assignment / bind";
+      leaf end-behavior-type {
+        type srv6-types:srv6-end-type;
+	description "End type";
+      }
+      // TODO: More
+    }
+    container requested {
+      description "Requested assignment / bind";
+      leaf end-behavior-type {
+        type srv6-types:srv6-end-type;
+	description "End type";
+      }
+      // TODO: More
+    }    
+
+    }
+  
 } // module
 

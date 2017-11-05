@@ -309,6 +309,26 @@ module ietf-srv6-types {
     description
       "Routing Table Id";
   }
-  
+
+  typedef srv6-status-type {
+    type enumeration {
+     enum up { value 1; description "State is Up"; }
+     enum down { description "State is Down"; }
+    }
+    description
+      "Status type";
+  }
+
+  typedef srv6-nexthop-type {
+    type enumeration {
+     enum ipv4 { value 1; description "IPv4 nexthop"; }
+     enum ipv6 { description "IPv6 nexthop"; }
+     enum mpls { description "MPLS nexthop"; }
+     enum l2 { description "L2 nexthop"; }
+    }
+    description
+      "Forwarding Nexthop type";
+  }
+    
 } // module
 
