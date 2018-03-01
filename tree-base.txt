@@ -3,7 +3,8 @@ module: ietf-srv6-base
     +--rw srv6
        +--rw enable?              boolean
        +--rw encapsulation
-       |  +--rw source-address?   inet:ipv6-address
+       |  +--rw source-address?       inet:ipv6-address
+       |  +--rw ip-ttl-propagation?   boolean
        +--rw locators
        |  +--rw locator* [name]
        |     +--rw name                      string
@@ -16,7 +17,7 @@ module: ietf-srv6-base
        |     +--ro is-in-address-conflict?   boolean
        +--ro node-capabilities
        |  +--ro end-behavior* [type]
-       |  |  +--ro type         srv6-types:srv6-end-type
+       |  |  +--ro type         identityref
        |  |  +--ro supported    boolean
        |  +--ro transit-behavior* [type]
        |  |  +--ro type         srv6-types:srv6-transit-type
@@ -35,40 +36,40 @@ module: ietf-srv6-base
        |     +--ro supported    boolean
        +--ro local-sids
           +--ro counters
-          |  +--ro cnt0
+          |  +--ro cnt3
           |     +--ro in-pkts?     yang:counter64
           |     +--ro in-octets?   yang:counter64
           +--ro local-sid* [sid]
              +--ro sid                  srv6-types:srv6-sid
-             +--ro end-behavior-type?   srv6-types:srv6-end-type
+             +--ro locator-ref?         -> /rt:routing/srv6:srv6/locators/locator/name
+             +--ro is-reserved?         boolean
+             +--ro end-behavior-type?   identityref
              +--ro alloc-type?          srv6-types:sid-alloc-type
              +--ro owner* [type instance]
-             |  +--ro type         srv6-types:srv6-sid-owner-type
+             |  +--ro type         identityref
              |  +--ro instance     string
              |  +--ro is-winner?   boolean
              +--ro forwarding
-             |  +--ro is-installed?   boolean
-             |  +--ro nexthop-type?   srv6-types:srv6-nexthop-type
+             |  +--ro is-installed?    boolean
+             |  +--ro next-hop-type?   srv6-types:srv6-nexthop-type
              |  +--ro paths
              |     +--ro path* [path-index]
-             |        +--ro path-index     uint8
+             |        +--ro path-index    uint8
              |        +--ro l2
              |        |  +--ro interface?   if:interface-ref
              |        +--ro l3
              |        |  +--ro interface?           if:interface-ref
              |        |  +--ro next-hop?            inet:ip-address
-             |        |  +--ro weight?              uint16
+             |        |  +--ro weight?              uint32
              |        |  +--ro role?                enumeration
              |        |  +--ro backup-path-index?   uint8
-             |        +--ro (dataplane-type)?
+             |        +--ro (encap-type)?
              |           +--:(srv6)
-             |           |  +--ro sid-stack
-             |           |     +--ro out-sid* [sid]
-             |           |        +--ro sid    srv6-types:srv6-sid
+             |           |  +--ro out-sid* [sid]
+             |           |     +--ro sid    srv6-types:srv6-sid
              |           +--:(mpls)
-             |              +--ro label-stack
-             |                 +--ro out-label* [label]
-             |                    +--ro label    rt-types:mpls-label
+             |              +--ro out-label* [label]
+             |                 +--ro label    rt-types:mpls-label
              +--ro counters
                 +--ro cnt1
                    +--ro in-pkts?     yang:counter64
@@ -81,6 +82,6 @@ module: ietf-srv6-base
     +---n srv6-sid-collision-event
        +--ro sid?         srv6-types:srv6-sid
        +--ro existing
-       |  +--ro end-behavior-type?   srv6-types:srv6-end-type
+       |  +--ro end-behavior-type?   identityref
        +--ro requested
-          +--ro end-behavior-type?   srv6-types:srv6-end-type
+          +--ro end-behavior-type?   identityref

@@ -13,12 +13,6 @@ module ietf-srv6-types {
     "WG Web:   <http://tools.ietf.org/wg/spring/>
      WG List:  <mailto:spring@ietf.org>
 
-     WG Chair: Bruno Decraene
-               <mailto:loa@pi.nu>
-
-     WG Chair: Martin Vigoureux 
-               <mailto:rcallon@juniper.net>
-
      Editor:   Kamran Raza
                <mailto:skraza@cisco.com>
 
@@ -27,6 +21,9 @@ module ietf-srv6-types {
 
      Editor:   Xufeng Liu
                <mailto:Xufeng_Liu@jabil.com>
+
+     Editor:   Zhibo Hu
+               <mailto:huzhibo@huawei.com>
 
      Editor:   Iftekhar Hussain
                <mailto:IHussain@infinera.com>
@@ -37,13 +34,25 @@ module ietf-srv6-types {
      Editor:   Daniel Voyer
                <mailto:daniel.voyer@bell.ca>
 
+     Editor:   Hani Elmalky
+               <mailto:hani.elmalky@ericsson.com>
+
+     Editor:   Satoru Matsushima
+               <mailto:satoru.matsushima@gmail.com>
+
+     Editor:   Katsuhiro Horiba 
+               <mailto:katsuhiro.horiba@g.softbank.co.jp>
+
+     Editor:   Ahmed AbdelSalam
+               <mailto:ahmed.abdelsalam@gssi.it>
+
      ";
 	      
   description
     "This YANG module defines the essential types for the
      management of Segment-Routing with IPv6 dataplane (SRv6).
 
-     Copyright (c) 2017 IETF Trust and the persons identified as
+     Copyright (c) 2018 IETF Trust and the persons identified as
      authors of the code.  All rights reserved.
 
      Redistribution and use in source and binary forms, with or
@@ -55,137 +64,364 @@ module ietf-srv6-types {
 
   reference "RFC XXXX";
 
-  revision 2017-11-11 {
+  revision 2018-03-01 {
     description
-      "Initial revision.";
+      "Updated to align with SRv6 network programming draft rev 04";
     reference
       "RFC XXXX: YANG Data Model for SRv6";
   }
-
-  // TODO: Special opcode
-
-  typedef srv6-end-type {
-
-    type enumeration {
-      /* draft-filsfils-spring-srv6-network-programming */
-
-      enum End {
-        value 1;
-        description
-          "The Endpoint function. This is the most 
-           basic function";
-      }
-      enum End.X {
-        description
-          "Endpoint with cross-connect to an array 
-           of layer-3 adjacencies";
-      }
-      enum End.T {
-        description
-          "Endpoint with specific IPv6 table lookup";
-      }
-      enum End.DX2 {
-        description
-          "Endpoint with decapsulation and Layer-2 
-           cross-connect to an L2 interface";
-      }
-      enum End.DX2V {
-        description
-          "Endpoint with decapsulation and specific 
-           VLAN L2 table lookup";
-      }
-      enum End.DT2U {
-        description
-          "Endpoint with decapsulation and specific 
-           unicast MAC L2 table lookup";
-      }
-      enum End.DT2M {
-        description
-          "Endpoint with decapsulation and specific L2 table 
-           flooding";
-      }
-      enum End.DX6 {
-        description
-          "Endpoint with decapsulation and cross-connect 
-           to an array of IPv6 adjacencies";
-      }
-      enum End.DX4 {
-        description
-          "Endpoint with decapsulation and cross-connect
-           to an array of IPv4 adjacencies";
-      }
-      enum End.DT6 {
-        description
-          "Endpoint with decapsulation and specific 
-           IPv6 table lookup";
-      }
-      enum End.DT4 {
-        description
-          "Endpoint with decapsulation and specific 
-           IPv4 table lookup";
-      }
-      enum End.DT46 {
-        description
-          "Endpoint with decapsulation and specific IP 
-           (IPv4 or IPv6) table lookup";
-      }
-      enum End.B6 {
-        description
-          "Endpoint bound to an SRv6 Policy";
-      }
-      enum End.B6.Encaps {
-        description
-          "This is a variation of the End.B6 behavior 
-           where the SRv6 Policy also includes an 
-           IPv6 Source Address A.";
-      }
-      enum End.BM {
-        description
-          "Endpoint bound to an SR-MPLS Policy";
-      }
-    
-      enum End.S {
-         description
-	    "Endpoint in search of a target in table TE";
-      } 
-
-      /* draft-clad-spring-segment-routing-service-chaining */ 
-      enum End.AS2 {
-          description
-	     "SFC Static proxy for inner type Ethernet";
-      } 
-      enum End.AS4 {
-          description
-	     "SFC Static proxy for inner type IPv4";
-      }
-      enum End.AS6 {
-          description
-	     "SFC Static proxy for inner type IPv6";
-      }
-      enum End.AD {
-          description
-	     "SFC Dynamic proxy";
-      }
-      enum End.ASM {
-          description
-	     "SFC Shared memory SR proxy";
-      }
-      enum End.AM {
-          description
-	     "SFC Masquerading SR proxy";
-      }
-    }
-    
-    description "SRv6 End behavior types";
+  
+  revision 2017-11-12 {
+    description
+      "Initial revision";
+    reference
+      "RFC XXXX: YANG Data Model for SRv6";
+  }
+ 
+  identity srv6-endpoint-type {
+      description
+        "Base identity from which specific SRv6 Endpoint types are derived.";
   }
 
+  /* Endpoints defined under draft-filsfils-spring-srv6-network-programming */
+  
+  identity End {
+    base srv6-endpoint-type;
+    description
+          "End function (variant: no PSP, no USP).";
+    reference
+          "draft-filsfils-spring-srv6-network-programming-04";
+  }
+
+  identity End_PSP {
+    base srv6-endpoint-type;
+    description
+          "End function (variant: PSP only).";
+    reference
+          "draft-filsfils-spring-srv6-network-programming-04";
+  }
+
+  identity End_USP {
+    base srv6-endpoint-type;
+    description
+          "End function (variant: USP only).";
+    reference
+          "draft-filsfils-spring-srv6-network-programming-04";
+  }
+
+  identity End_PSP_USP {
+    base srv6-endpoint-type;
+    description
+          "End function (variant: PSP and USP).";
+    reference
+          "draft-filsfils-spring-srv6-network-programming-04";
+  }
+
+  identity End.X {
+    base srv6-endpoint-type;
+    description
+          "Endpoint with cross-connect to an array 
+           of layer-3 adjacencies (variant: no PSP, no USP).";
+    reference
+          "draft-filsfils-spring-srv6-network-programming-04";
+  }
+
+  identity End.X_PSP {
+    base srv6-endpoint-type;
+    description
+          "Endpoint with cross-connect to an array 
+           of layer-3 adjacencies (variant: PSP only).";
+    reference
+          "draft-filsfils-spring-srv6-network-programming-04";
+  }
+
+  identity End.X_USP {
+    base srv6-endpoint-type;
+    description
+          "Endpoint with cross-connect to an array 
+           of layer-3 adjacencies (variant: USP only).";
+    reference
+          "draft-filsfils-spring-srv6-network-programming-04";
+  }
+
+  identity End.X_PSP_USP {
+    base srv6-endpoint-type;
+    description
+          "Endpoint with cross-connect to an array 
+           of layer-3 adjacencies (variant: PSP and USP).";
+    reference
+          "draft-filsfils-spring-srv6-network-programming-04";
+  }
+
+  identity End.T {
+    base srv6-endpoint-type;
+    description
+          "Endpoint with specific IPv6 table lookup 
+	  (variant: no PSP, no USP).";
+    reference
+          "draft-filsfils-spring-srv6-network-programming-04";
+  }
+
+  identity End.T_PSP {
+    base srv6-endpoint-type;
+    description
+          "Endpoint with specific IPv6 table lookup 
+	  (variant: PSP only).";
+    reference
+          "draft-filsfils-spring-srv6-network-programming-04";
+  }
+
+  identity End.T_USP {
+    base srv6-endpoint-type;
+    description
+          "Endpoint with specific IPv6 table lookup 
+	   (variant: USP only).";
+    reference
+          "draft-filsfils-spring-srv6-network-programming-04";
+  }
+
+  identity End.T_PSP_USP {
+    base srv6-endpoint-type;
+    description
+          "Endpoint with specific IPv6 table lookup 
+	   (variant: PSP and USP).";
+    reference
+          "draft-filsfils-spring-srv6-network-programming-04";
+  }
+  
+  identity End.B6 {
+    base srv6-endpoint-type;
+    description
+          "Endpoint bound to an SRv6 Policy";
+    reference
+          "draft-filsfils-spring-srv6-network-programming-04";
+  }
+      
+  identity End.B6.Encaps {
+    base srv6-endpoint-type;
+    description
+         "This is a variation of the End.B6 behavior 
+          where the SRv6 Policy also includes an 
+          IPv6 Source Address A.";
+    reference
+          "draft-filsfils-spring-srv6-network-programming-04";
+   }
+      
+   identity End.BM {
+     base srv6-endpoint-type;
+     description
+          "Endpoint bound to an SR-MPLS Policy";
+    reference
+          "draft-filsfils-spring-srv6-network-programming-04";
+   }
+
+   identity End.DX6 {
+     base srv6-endpoint-type;
+     description
+          "Endpoint with decapsulation and cross-connect 
+           to an array of IPv6 adjacencies";
+     reference
+          "draft-filsfils-spring-srv6-network-programming-04";
+   }
+    
+   identity End.DX4 {
+     base srv6-endpoint-type;
+     description
+          "Endpoint with decapsulation and cross-connect
+           to an array of IPv4 adjacencies";
+     reference
+          "draft-filsfils-spring-srv6-network-programming-04";
+   }
+    
+   identity End.DT6 {
+     base srv6-endpoint-type;
+     description
+          "Endpoint with decapsulation and specific 
+           IPv6 table lookup";
+     reference
+          "draft-filsfils-spring-srv6-network-programming-04";
+   }
+    
+   identity End.DT4 {
+     base srv6-endpoint-type;
+     description
+          "Endpoint with decapsulation and specific 
+           IPv4 table lookup";
+     reference
+          "draft-filsfils-spring-srv6-network-programming-04";
+   }
+    
+   identity End.DT46 {
+     base srv6-endpoint-type;
+     description
+          "Endpoint with decapsulation and specific IP 
+           (IPv4 or IPv6) table lookup";
+     reference
+          "draft-filsfils-spring-srv6-network-programming-04";
+   }
+      
+   identity End.DX2 {
+     base srv6-endpoint-type;
+     description
+          "Endpoint with decapsulation and Layer-2 
+           cross-connect to an L2 interface";
+     reference
+          "draft-filsfils-spring-srv6-network-programming-04";
+   }
+    
+   identity End.DX2V {
+     base srv6-endpoint-type;
+     description
+          "Endpoint with decapsulation and specific 
+           VLAN L2 table lookup";
+     reference
+          "draft-filsfils-spring-srv6-network-programming-04";
+   }
+    
+   identity End.DT2U {
+     base srv6-endpoint-type;
+     description
+          "Endpoint with decapsulation and specific 
+           unicast MAC L2 table lookup";
+     reference
+          "draft-filsfils-spring-srv6-network-programming-04";
+   }
+    
+   identity End.DT2M {
+     base srv6-endpoint-type;
+     description
+          "Endpoint with decapsulation and specific L2 table 
+           flooding";
+     reference
+          "draft-filsfils-spring-srv6-network-programming-04";
+   }
+
+   identity End.OTP {
+     base srv6-endpoint-type;
+     description
+          "Endpoint for OAM operation of timestamp and punt";
+     reference
+          "draft-filsfils-spring-srv6-network-programming-04";
+   }
+
+   identity End.S {
+     base srv6-endpoint-type;
+     description
+	    "Endpoint in search of a target in table TE";
+     reference
+          "draft-filsfils-spring-srv6-network-programming-04";
+   }
+
+   /* Endpoints defined under draft-xuclad-spring-sr-service-chaining */
+   
+   identity End.AS {
+     base srv6-endpoint-type;
+     description
+	"Service-Chaining Static proxy for inner type (Ethernet, 
+	IPv4 or IPv6)";
+     reference
+          "draft-xuclad-spring-sr-service-chaining-01";
+   }
+
+   identity End.AD {
+     base srv6-endpoint-type;
+     description
+	 "Service-Chaining Dynamic proxy for inner type (Ethernet, 
+	 IPv4 or IPv6)";
+     reference
+          "draft-xuclad-spring-sr-service-chaining-01";
+   }
+   
+   identity End.ASM {
+     base srv6-endpoint-type;
+     description
+	 "Service-Chaining Shared memory SR proxy for inner type 
+	 (Ethernet, IPv4 or IPv6)";
+     reference
+          "draft-xuclad-spring-sr-service-chaining-01";
+   }
+   
+   identity End.AM {
+     base srv6-endpoint-type;
+     description
+	 "Service-Chaining Masquerading SR proxy";
+      reference
+          "draft-xuclad-spring-sr-service-chaining-01";
+   }   
+
+   identity End.AM {
+     base srv6-endpoint-type;
+     description
+	 "Service-Chaining Masquerading SR proxy";
+      reference
+          "draft-xuclad-spring-sr-service-chaining-01";
+   }   
+
+   /* Endpoints defined under draft-ietf-dmm-srv6-mobile-uplane */
+
+   identity End.MAP {
+     base srv6-endpoint-type;
+     description
+	 "DMM End.MAP";
+      reference
+          "draft-ietf-dmm-srv6-mobile-uplane-01";
+   }
+
+   identity End.M.GTP6.UP {
+     base srv6-endpoint-type;
+     description
+	 "DMM End.M.GTP6.UP";
+      reference
+          "draft-ietf-dmm-srv6-mobile-uplane-01";
+   }
+
+   identity End.M.GTP6.DN {
+     base srv6-endpoint-type;
+     description
+	 "DMM End.M.GTP6.DN";
+      reference
+          "draft-ietf-dmm-srv6-mobile-uplane-01";
+   }
+
+   identity End.M.GTP4.DN {
+     base srv6-endpoint-type;
+     description
+	 "DMM End.M.GTP4.DN";
+      reference
+          "draft-ietf-dmm-srv6-mobile-uplane-01";
+   }
+
+   identity End.Limit {
+     base srv6-endpoint-type;
+     description
+	 "DMM End.Limit";
+      reference
+          "draft-ietf-dmm-srv6-mobile-uplane-01";
+   }
+   
   typedef srv6-transit-type {
+    
     type enumeration {
-      /* draft-filsfils-spring-srv6-network-programming */ 
-      enum T { value 1; description "Transit"; }
-      enum T.Encaps { description "T.Encaps"; }
-      enum T.Insert { description "T.Insert"; }
-      enum T.Encaps.L2 { description "T.Encaps.L2"; }
+      /* draft-filsfils-spring-srv6-network-programming-04 */ 
+      enum T { value 1; description "Transit behavior"; }
+      enum T.Insert {
+         description "Transit behavior with insertion of an SRv6 policy";
+      }
+      enum T.Insert.Red {
+         description "Transit behavior with reduced insertion of an SRv6 policy";
+      }
+      enum T.Encaps {
+         description "Transit behavior with encap of an SRv6 policy";
+      }
+      enum T.Encaps.Red {
+         description "Transit behavior with reduced encap of an SRv6 policy";
+      }
+      enum T.Encaps.L2 {
+         description "T.Encaps behavior on the received L2 frame";
+      }
+      enum T.Encaps.L2.Red {
+         description "T.Encaps.Red behavior on the received L2 frame";
+      }
     }
     
     description "SRv6 Transit behavior types";
@@ -193,7 +429,7 @@ module ietf-srv6-types {
 
   typedef srv6-security-rule-type {
     type enumeration {
-      /* draft-filsfils-spring-srv6-network-programming */ 
+      /* draft-filsfils-spring-srv6-network-programming-04 */ 
       enum SEC1 { value 1; description "Security rule SEC1"; }
       enum SEC2 { description "Security rule SEC2"; }
       enum SEC3 { description "Security rule SEC3"; }
@@ -205,10 +441,10 @@ module ietf-srv6-types {
 
   typedef srv6-counter-type {
     type enumeration {
-      /* draft-filsfils-spring-srv6-network-programming */ 
-      enum CNT0 { value 0; description "CNT0"; }
-      enum CNT1 { description ""; }
+      /* draft-filsfils-spring-srv6-network-programming-04 */ 
+      enum CNT1 { description "CNT1"; }
       enum CNT2 { description "CNT2"; }
+      enum CNT3 { value 0; description "CNT0"; }
     }
 
     description "SRv6 counter types";
@@ -247,11 +483,6 @@ module ietf-srv6-types {
   typedef srv6-func-opcode-reserved-type {
       type enumeration {
         enum invalid {  value 0; description "Invalid opcode"; }
-	enum default-end-psp {  value 1;
-	                        description "Opcode for Default End/PSP funcion"; }
-	enum default-end-usp {  value 2;
-	                        description "Opcode for Default End/USP funcion"; }
-	// TODO enum wildcard { value ~0; description "Opcode for Wildcard/mass operations"; }
       }
      
       description "SRv6 SID FUNC Reserved Opcodes";
@@ -289,20 +520,41 @@ module ietf-srv6-types {
       "Types of sid allocation used.";
   }
 
-  typedef srv6-sid-owner-type {
-    type enumeration {
-      enum isis { value 1; description "ISIS"; }
-      enum ospfv3 { description "OSPFv3"; }
-      enum bgp { description "BGP"; }
-      enum evpn { description "EVPN"; }
-      enum sr-policy { description "SR Policy"; }	    
-      enum sfc { description "SFC"; }
-      // TODO: Others
-    }
-    description
-      "SID Client types.";
+  identity srv6-sid-owner-type {
+      description
+        "Base identity from which SID owner types are derived.";
   }
 
+  identity isis {
+      base srv6-sid-owner-type;
+      description "ISIS";
+  }
+
+  identity ospfv3 {
+      base srv6-sid-owner-type;
+      description "OSPFv3";
+  }
+
+  identity bgp {
+      base srv6-sid-owner-type;
+      description "BGP";
+  }
+
+  identity evpn {
+      base srv6-sid-owner-type;
+      description "EVPN";
+  }
+
+  identity sr-policy {
+      base srv6-sid-owner-type;
+      description "SR Policy";
+  }
+
+  identity service-function {
+      base srv6-sid-owner-type;
+      description "SF";
+  }
+    
   // TODO: Rtg module ? 
   typedef table-id {
     type uint32;
@@ -321,13 +573,13 @@ module ietf-srv6-types {
 
   typedef srv6-nexthop-type {
     type enumeration {
-     enum ipv4 { value 1; description "IPv4 nexthop"; }
-     enum ipv6 { description "IPv6 nexthop"; }
-     enum mpls { description "MPLS nexthop"; }
-     enum l2 { description "L2 nexthop"; }
+     enum ipv4 { value 1; description "IPv4 next-hop"; }
+     enum ipv6 { description "IPv6 next-hop"; }
+     enum mpls { description "MPLS next-hop"; }
+     enum l2 { description "L2 next-hop"; }
     }
     description
-      "Forwarding Nexthop type";
+      "Forwarding Next-hop type";
   }
     
 } // module
