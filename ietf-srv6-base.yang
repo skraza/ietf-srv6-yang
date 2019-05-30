@@ -1,32 +1,42 @@
 module ietf-srv6-base {
+  yang-version 1.1;
 
   namespace "urn:ietf:params:xml:ns:yang:ietf-srv6-base";
   prefix srv6;
 
   import ietf-interfaces {
     prefix "if";
+    reference "RFC 8343: A YANG Data Model for Interface Management";
   }
-  
+
   import ietf-inet-types {
     prefix inet;
+    reference "RFC 6991: Common YANG Data Types";
   }
 
   import ietf-yang-types {
     prefix "yang";
+    reference "RFC 6991: Common YANG Data Types";
   }
 
   import ietf-routing-types {
      prefix "rt-types";
+     reference "RFC 8294: Common YANG Data Types for the Routing Area";
   }
-  
+
   import ietf-routing {
     prefix "rt";
+    reference
+      "RFC 8349: A YANG Data Model for Routing Management (NMDA version)";
   }
-  
+
   import ietf-srv6-types {
     prefix srv6-types;
+    reference "RFC XXXX: YANG Data Model for SRv6";
+    // RFC Editor: replace XXXX with actual RFC number and remove
+    // this note
   }
-  
+
   organization
     "IETF SPRING Working Group";
   contact
@@ -60,14 +70,14 @@ module ietf-srv6-base {
      Editor:   Satoru Matsushima
                <mailto:satoru.matsushima@gmail.com>
 
-     Editor:   Katsuhiro Horiba 
+     Editor:   Katsuhiro Horiba
                <mailto:katsuhiro.horiba@g.softbank.co.jp>
 
      Editor:   Ahmed AbdelSalam
                <mailto:ahmed.abdelsalam@gssi.it>
 
      ";
-	      
+
   description
     "This YANG module defines the essential elements for the
      management of Segment-Routing with IPv6 dataplane (SRv6).
@@ -84,18 +94,13 @@ module ietf-srv6-base {
 
   reference "RFC XXXX";
 
-  revision 2018-03-01 {
-    description
-      "Updated to align with SRv6 network programming draft rev 04";
-    reference
-      "RFC XXXX: YANG Data Model for SRv6";
-  }
-  
-  revision 2017-11-12 {
+  revision 2018-10-22 {
     description
       "Initial revision.";
     reference
       "RFC XXXX: YANG Data Model for SRv6";
+    // RFC Editor: replace XXXX with actual RFC number and remove
+    // this note
   }
 
 /*
@@ -103,9 +108,9 @@ module ietf-srv6-base {
  */
 
   grouping path-attrs-cmn {
-     description 
+     description
        "Path properties -common for v4/v6";
-     
+
      leaf weight {
        type uint32;
        description
@@ -120,9 +125,9 @@ module ietf-srv6-base {
          enum PRIMARY { description "Path as primary traffic carrying"; }
          enum BACKUP { description "Path acts as a backup"; }
          enum PRIMARY_AND_BACKUP { description
-	            "Path acts as primary and backup simultaneously"; }
+                    "Path acts as primary and backup simultaneously"; }
         }
-	 description "The path role";
+         description "The path role";
       }
 
       leaf backup-path-index {
@@ -133,32 +138,31 @@ module ietf-srv6-base {
 
   grouping path-out-sids {
     description "Grouping for path's SID stack";
-    
+
       list out-sid {
         key "sid";
-	description "Out SID";
+        description "Out SID";
 
         leaf sid {
-  	  type srv6-types:srv6-sid;
-	  description "SID value";
-	}
+          type srv6-types:srv6-sid;
+          description "SID value";
+        }
       }
-    
   }
-  
+
   grouping path-out-labels {
     description "Grouping for path's label stack";
-    
+
       list out-label {
         key "label";
-	description "Out label";
+        description "Out label";
 
         leaf label {
-  	  type rt-types:mpls-label;
-	  description "Label value";
-	}
+          type rt-types:mpls-label;
+          description "Label value";
+        }
       }
-    
+
   }
 
  /*
@@ -166,7 +170,7 @@ module ietf-srv6-base {
   */
   grouping srv6-encap {
    description "Grouping for encap param config.";
-   
+
    container encapsulation {
       description "Configure encapsulation related parameters";
       leaf source-address {
@@ -176,8 +180,8 @@ module ietf-srv6-base {
       }
       leaf ip-ttl-propagation {
         type boolean;
-	default false;
-        description "IP TTL propagation from encapsulated packet to encapsulating outer 
+        default false;
+        description "IP TTL propagation from encapsulated packet to encapsulating outer
                      IPv6 header. When configured on decapsulation side, this refers to
                      propagating IP TTL from outer IPv6 header to inner header after decap";
       }
@@ -190,24 +194,24 @@ module ietf-srv6-base {
 
        leaf operational-status {
          type srv6-types:srv6-status-type;
-	 config false;
-	 description "Indicates whether locator state is UP";
+         config false;
+         description "Indicates whether locator state is UP";
        }
 
        leaf is-in-address-conflict {
          type boolean;
-	 config false;
-	 description "Indicates whether locator address conflicts with 
-	              some other IPv6 address on the box";
+         config false;
+         description "Indicates whether locator address conflicts with
+                      some other IPv6 address on the box";
        }
     }
-  
+
   grouping srv6-locators {
    description "SRv6 locator grouping";
-   
+
    container locators {
       description "SRv6 locators";
-      
+
       list locator {
         key "name";
         description "Configure a SRv6 locator";
@@ -219,12 +223,12 @@ module ietf-srv6-base {
 
         leaf enable {
           type boolean;
-	  default false;
+          default false;
           description "Enable a SRv6 locator";
         }
         leaf is-default {
           type boolean;
-	  mandatory true;
+          mandatory true;
           description "Indicates if the locator is a default locator";
         }
 
@@ -232,16 +236,16 @@ module ietf-srv6-base {
           description "Specify locator prefix value";
           leaf address {
             type inet:ipv6-address;
-	    mandatory true;
+            mandatory true;
             description "IPv6 address";
           }
           leaf length {
             type srv6-types:srv6-locator-len;
-	    mandatory true;
+            mandatory true;
             description "Locator (prefix) length";
           }
         }
-	uses srv6-locator-state;
+        uses srv6-locator-state;
       }
     }
   }
@@ -290,7 +294,7 @@ module ietf-srv6-base {
        }
     }
   }
-  
+
   grouping local-sid-fwd-state {
     description "SRv6 local-SID forwarding state grouping";
 
@@ -299,17 +303,17 @@ module ietf-srv6-base {
 
        leaf is-installed {
          type boolean;
-	 description "Indicates whether SID is installed in forwarding";
+         description "Indicates whether SID is installed in forwarding";
        }
 
        leaf next-hop-type {
          type srv6-types:srv6-nexthop-type;
-	 description "Forwarding next-hop types";
+         description "Forwarding next-hop types";
        }
-       
+
        container paths {
          when "../is-installed = 'true'" {
-	   description "This container is valid only when the local-SID is installed 
+           description "This container is valid only when the local-SID is installed
                in forwarding";
          }
 
@@ -323,45 +327,45 @@ module ietf-srv6-base {
           }
 
           container l2 {
-	    when "../../../next-hop-type = 'l2'" {
-	      description "This container is valid only for L2 type of NHs";
-	    }
+            when "../../../next-hop-type = 'l2'" {
+              description "This container is valid only for L2 type of NHs";
+            }
 
             leaf interface {
               type if:interface-ref;
                description "The outgoing Layer2 interface";
             }
-	    
+
             description "L2 information";
-	  }
-	  
+          }
+
           container l3 {
-	    when "../../../next-hop-type != 'l2'" {
-	      description "This container is valid only for L3 type of NHs";
-	    }
+            when "../../../next-hop-type != 'l2'" {
+              description "This container is valid only for L3 type of NHs";
+            }
 
             leaf interface {
               type if:interface-ref;
                description "The outgoing Layer3 interface";
             }
-	    
+
             leaf next-hop {
               type inet:ip-address;
               description "The IP address of the next-hop";
             }
-     
+
             uses path-attrs-cmn;
-  
+
             description "L3 information";
-	  }
-	  uses path-out-sids-choice;	    
+          }
+          uses path-out-sids-choice;
         }
-	
-	description "Forwarding paths";
+
+        description "Forwarding paths";
        }
     }
   }
-  
+
   grouping srv6-state-sid {
    description "SRv6 SID state grouping";
 
@@ -371,33 +375,33 @@ module ietf-srv6-base {
 
      container counters {
          description "SRv6 counters";
-   
+
          container cnt3 {
            description "Counts SRv6 traffic received/dropped on local prefix not instantiated as local-SID";
-	   uses srv6-stats-in;
-	 }
-     }   
-   
+           uses srv6-stats-in;
+         }
+     }
+
      list local-sid {
        key "sid";
        description "Per-localSID Counters";
-            
+
        leaf sid {
         type srv6-types:srv6-sid;
-	description "Local SID value";
+        description "Local SID value";
        }
 
        uses srv6-locator-ref;
 
        leaf is-reserved {
          type boolean;
-	 description "Set to true if SID comes from reserved pool";
+         description "Set to true if SID comes from reserved pool";
        }
-       
+
        leaf end-behavior-type {
            type identityref {
-	     base srv6-types:srv6-endpoint-type;
-	   } 
+             base srv6-types:srv6-endpoint-type;
+           }
            description "Type of SRv6 end behavior.";
        }
 
@@ -406,23 +410,23 @@ module ietf-srv6-base {
         description
           "Type of sid allocation.";
        }
-       
+
        list owner {
          key "type instance";
          description "SID Owner clients";
-	 leaf type {
-	   type identityref {
-	     base srv6-types:srv6-sid-owner-type;
-	   }
-	   description "SID owner/client type";
-	 }
-	 leaf instance {
-	   type string;
-	   description "Client instance";
-	 }
-	 leaf is-winner {
-	   type boolean;
-	   description "Is this client/owner the winning in terms of forwarding";
+         leaf type {
+           type identityref {
+             base srv6-types:srv6-sid-owner-type;
+           }
+           description "SID owner/client type";
+         }
+         leaf instance {
+           type string;
+           description "Client instance";
+         }
+         leaf is-winner {
+           type boolean;
+           description "Is this client/owner the winning in terms of forwarding";
          }
        }
 
@@ -430,11 +434,11 @@ module ietf-srv6-base {
 
        container counters {
          description "SRv6 per local-SID counters";
-   
+
          container cnt1 {
            description "Counts SRv6 traffic received on local-SID prefix and processed successfully";
-	   uses srv6-stats-in;
-	 }
+           uses srv6-stats-in;
+         }
        }
     }
    }
@@ -446,7 +450,7 @@ module ietf-srv6-base {
    list end-behavior {
      key "type";
      description "End behavior support";
-     
+
      leaf type {
        type identityref {
          base srv6-types:srv6-endpoint-type;
@@ -467,14 +471,14 @@ module ietf-srv6-base {
    list transit-behavior {
      key "type";
      description "Transit behavior support";
-     
+
      leaf type {
        type srv6-types:srv6-transit-type;
        description "Transit behavior (T*) type";
      }
      leaf supported {
        type boolean;
-       mandatory true;	    
+       mandatory true;
        description "True if supported";
      }
     }
@@ -485,39 +489,39 @@ module ietf-srv6-base {
 
    container signaled-parameters {
      description "SRv6 signaled parameter support";
-     
+
      leaf max-sl {
        type uint8;
        //mandatory true;
-       description "Maximum value of the SL field in the SRH of 
-                    a received packet before applying the function 
+       description "Maximum value of the SL field in the SRH of
+                    a received packet before applying the function
                     associated with a SID";
      }
      leaf max-end-pop-srh {
        type uint8;
        //mandatory true;
-       description "Maximum number of SIDs in the top SRH in an 
-                    SRH stack to which the router can apply 
+       description "Maximum number of SIDs in the top SRH in an
+                    SRH stack to which the router can apply
                     PSP or USP flavors";
      }
      leaf max-t_insert {
        type uint8;
        //mandatory true;
-       description "Maximum number of SIDs that can be inserted as 
-                   part of the T.insert behavior"; 
+       description "Maximum number of SIDs that can be inserted as
+                   part of the T.insert behavior";
      }
      leaf max-t_encap {
        type uint8;
        //mandatory true;
-       description "Maximum number of SIDs that can be inserted as 
-                    part of the T.Encap behavior"; 
+       description "Maximum number of SIDs that can be inserted as
+                    part of the T.Encap behavior";
      }
      leaf max-end_d {
        type uint8;
        //mandatory true;
-       description "Maximum number of SIDs in an SRH when applying 
+       description "Maximum number of SIDs in an SRH when applying
                     End.DX6 and End.DT6 functions";
-     }     
+     }
     }
   }
 
@@ -527,7 +531,7 @@ module ietf-srv6-base {
    list security-rule {
      key "type";
      description "Security rule support";
-     
+
      leaf type {
        type srv6-types:srv6-security-rule-type;
        description "Security rule type";
@@ -546,7 +550,7 @@ module ietf-srv6-base {
    list counters {
      key "type";
      description "SRv6 counter support";
-     
+
      leaf type {
        type srv6-types:srv6-counter-type;
        description "Counter type";
@@ -558,7 +562,7 @@ module ietf-srv6-base {
      }
     }
    }
-   
+
    grouping srv6-state-capabilities {
      description "SRv6 node capabilities grouping";
      container node-capabilities {
@@ -576,7 +580,7 @@ module ietf-srv6-base {
   augment "/rt:routing" {
      description
       "This augments routing-instance configuration with segment-routing SRv6.";
-       
+
    container srv6 {
     description "Segment Routing with IPv6 dataplane";
 
@@ -630,9 +634,9 @@ module ietf-srv6-base {
       description "Current assignment / bind";
       leaf end-behavior-type {
         type identityref {
-	  base srv6-types:srv6-endpoint-type;
-	}
-	description "End type";
+          base srv6-types:srv6-endpoint-type;
+        }
+        description "End type";
       }
       // TODO: More
     }
@@ -641,13 +645,12 @@ module ietf-srv6-base {
 
       leaf end-behavior-type {
         type identityref {
-	  base srv6-types:srv6-endpoint-type;
-	}
-	description "End type";
+          base srv6-types:srv6-endpoint-type;
+        }
+        description "End type";
       }
-    }  
+    }
 
     }
 
 } // module
-

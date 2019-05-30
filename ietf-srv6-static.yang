@@ -1,28 +1,40 @@
 module ietf-srv6-static {
+  yang-version 1.1;
 
   namespace "urn:ietf:params:xml:ns:yang:ietf-srv6-static";
   prefix srv6-static;
 
   import ietf-interfaces {
     prefix "if";
+    reference "RFC 8343: A YANG Data Model for Interface Management";
   }
 
   import ietf-inet-types {
     prefix inet;
+    reference "RFC 6991: Common YANG Data Types";
   }
 
   import ietf-routing {
     prefix "rt";
+    reference
+      "RFC 8349: A YANG Data Model for Routing Management (NMDA
+       version)";
   }
-   
+
   import ietf-srv6-types {
     prefix srv6-types;
+    reference "RFC XXXX: YANG Data Model for SRv6";
+    // RFC Editor: replace XXXX with actual RFC number and remove
+    // this note
   }
 
   import ietf-srv6-base {
     prefix srv6;
+    reference "RFC XXXX: YANG Data Model for SRv6";
+    // RFC Editor: replace XXXX with actual RFC number and remove
+    // this note
   }
-  
+
   organization
     "IETF SPRING Working Group";
   contact
@@ -36,7 +48,7 @@ module ietf-srv6-static {
                <maito:jrajaman@cisco.com>
 
      Editor:   Xufeng Liu
-               <mailto:Xufeng_Liu@jabil.com>
+               <mailto:xufeng.liu.ietf@gmail.com>
 
      Editor:   Zhibo Hu
                <mailto:huzhibo@huawei.com>
@@ -56,20 +68,20 @@ module ietf-srv6-static {
      Editor:   Satoru Matsushima
                <mailto:satoru.matsushima@gmail.com>
 
-     Editor:   Katsuhiro Horiba 
+     Editor:   Katsuhiro Horiba
                <mailto:katsuhiro.horiba@g.softbank.co.jp>
 
      Editor:   Ahmed AbdelSalam
                <mailto:ahmed.abdelsalam@gssi.it>
 
      ";
-	      
+
   description
     "This YANG module defines the essential elements for the
-     management of Static application for Segment-Routing with 
+     management of Static application for Segment-Routing with
      IPv6 dataplane (SRv6).
 
-     Copyright (c) 2017 IETF Trust and the persons identified as
+     Copyright (c) 2018 IETF Trust and the persons identified as
      authors of the code.  All rights reserved.
 
      Redistribution and use in source and binary forms, with or
@@ -80,52 +92,49 @@ module ietf-srv6-static {
      (http://trustee.ietf.org/license-info).";
 
   reference "RFC XXXX";
+    // RFC Editor: replace XXXX with actual RFC number and remove
+     // this note
 
-  revision 2018-03-01 {
-    description
-      "Updated to align with SRv6 network programming draft rev 04";
-    reference
-      "RFC XXXX: YANG Data Model for SRv6";
-  }
-  
-  revision 2017-11-12 {
+  revision 2018-10-22 {
     description
       "Initial revision.";
     reference
       "RFC XXXX: YANG Data Model for SRv6";
+    // RFC Editor: replace XXXX with actual RFC number and remove
+    // this note
   }
 
  /*
   * Config and State
   */
 
-   
+
   grouping path-attrs-v6 {
-     description 
+     description
        "IPv6 Path properties";
 
      leaf interface {
         type if:interface-ref;
         description "The outgoing interface";
      }
-     
+
      leaf next-hop {
        type inet:ipv6-address;
        description "The IP address of the next-hop";
      }
-	  
+
     uses srv6:path-attrs-cmn;
   }
-   
+
   grouping path-attrs-v4 {
-     description 
+     description
        "IPv4 Path properties";
 
      leaf interface {
         type if:interface-ref;
         description "The outgoing interface";
      }
-     
+
      leaf next-hop {
        type inet:ipv4-address;
        description "The IP address of the next-hop";
@@ -133,16 +142,16 @@ module ietf-srv6-static {
 
     uses srv6:path-attrs-cmn;
   }
-  
+
   grouping path-attrs-mpls {
-     description 
+     description
        "MPLS Path properties";
 
      leaf interface {
         type if:interface-ref;
         description "The outgoing interface";
      }
-     
+
      leaf next-hop {
        type inet:ip-address;
        description "The IP address of the next-hop";
@@ -150,10 +159,10 @@ module ietf-srv6-static {
 
     uses srv6:path-attrs-cmn;
   }
-  
+
   grouping multi-paths-v6 {
     description "Multipath grouping";
-    
+
     container paths {
       description "List of outgoing paths";
       list path {
@@ -166,17 +175,17 @@ module ietf-srv6-static {
         }
 
         uses path-attrs-v6;
-	container encap {
-	  description "Encapsulation on path";
+        container encap {
+          description "Encapsulation on path";
           uses srv6:path-out-sids;
-	}
+        }
         }
       }
    }
 
   grouping multi-paths-v4 {
     description "Multipath grouping";
-    
+
     container paths {
       description "List of outgoing paths";
       list path {
@@ -189,8 +198,8 @@ module ietf-srv6-static {
         }
 
         uses path-attrs-v4;
-	container encap {
-	  description "Encapsulation on path";
+        container encap {
+          description "Encapsulation on path";
           uses srv6:path-out-sids;
         }
        }
@@ -199,7 +208,7 @@ module ietf-srv6-static {
 
   grouping multi-paths-mpls {
     description "Multipath grouping";
-    
+
     container paths {
       description "List of outgoing paths";
       list path {
@@ -212,8 +221,8 @@ module ietf-srv6-static {
         }
 
         uses path-attrs-mpls;
-	container encap {
-	  description "Encapsulation on path";
+        container encap {
+          description "Encapsulation on path";
           uses srv6:path-out-labels;
         }
        }
@@ -237,7 +246,7 @@ module ietf-srv6-static {
       description
         "Type of SRv6 end behavior.";
     }
-    
+
     container end {
       when "../end-behavior-type = 'End'" {
         description
@@ -245,12 +254,12 @@ module ietf-srv6-static {
            behavior (variant: no PSP, no USP).";
       }
       description
-        "The Endpoint function is the most basic function. 
-         FIB lookup on updated DA and forward accordingly 
-         to the matched entry. 
+        "The Endpoint function is the most basic function.
+         FIB lookup on updated DA and forward accordingly
+         to the matched entry.
          This is the SRv6 instantiation of a Prefix SID
          (variant: no PSP, no USP)";
-	 
+
     }
 
     container end_psp {
@@ -260,14 +269,14 @@ module ietf-srv6-static {
            behavior (variant: PSP only).";
       }
       description
-        "The Endpoint function is the most basic function. 
-         FIB lookup on updated DA and forward accordingly 
-         to the matched entry. 
+        "The Endpoint function is the most basic function.
+         FIB lookup on updated DA and forward accordingly
+         to the matched entry.
          This is the SRv6 instantiation of a Prefix SID
          (variant: PSP only)";
 
     }
-    
+
     container end_usp {
       when "../end-behavior-type = 'End_USP'" {
         description
@@ -275,9 +284,9 @@ module ietf-srv6-static {
            behavior (variant: USP only).";
       }
       description
-        "The Endpoint function is the most basic function. 
-         FIB lookup on updated DA and forward accordingly 
-         to the matched entry. 
+        "The Endpoint function is the most basic function.
+         FIB lookup on updated DA and forward accordingly
+         to the matched entry.
          This is the SRv6 instantiation of a Prefix SID
          (variant: USP only)";
 
@@ -290,14 +299,14 @@ module ietf-srv6-static {
            behavior (variant: PSP/USP).";
       }
       description
-        "The Endpoint function is the most basic function. 
-         FIB lookup on updated DA and forward accordingly 
-         to the matched entry. 
+        "The Endpoint function is the most basic function.
+         FIB lookup on updated DA and forward accordingly
+         to the matched entry.
          This is the SRv6 instantiation of a Prefix SID
          (variant: PSP/USP)";
 
     }
-    
+
     container end-t {
       when "../end-behavior-type = 'End.T'" {
         description
@@ -306,16 +315,16 @@ module ietf-srv6-static {
       }
       description
         "Endpoint with specific IPv6 table lookup (variant: no PSP, no USP).
-         Lookup the next segment in IPv6 table T 
+         Lookup the next segment in IPv6 table T
          associated with the SID and forward via
          the matched table entry.
-         The End.T is used for multi-table operation 
+         The End.T is used for multi-table operation
          in the core.";
 
         // TODO presence  "Mandatory child only if container is present";
         leaf lookup-table-ipv6 {
           type srv6-types:table-id;
-	  mandatory true;	  
+          mandatory true;
           description
             "Table Id for lookup on updated DA (next segment)";
         }
@@ -329,22 +338,23 @@ module ietf-srv6-static {
       }
       description
         "Endpoint with specific IPv6 table lookup (variant: PSP only).
-         Lookup the next segment in IPv6 table T 
+         Lookup the next segment in IPv6 table T
          associated with the SID and forward via
          the matched table entry.
-         The End.T is used for multi-table operation 
+
+         The End.T is used for multi-table operation
          in the core.";
-	 
-  	// TODO presence  "Mandatory child only if container is present";
-	
+
+        // TODO presence  "Mandatory child only if container is present";
+
         leaf lookup-table-ipv6 {
           type srv6-types:table-id;
-	  mandatory true;	  
+          mandatory true;
           description
             "Table Id for lookup on updated DA (next segment)";
         }
     }
-    
+
 
     container end-t_usp {
       when "../end-behavior-type = 'End.T_USP'" {
@@ -354,17 +364,17 @@ module ietf-srv6-static {
       }
       description
         "Endpoint with specific IPv6 table lookup (variant: USP only).
-         Lookup the next segment in IPv6 table T 
+         Lookup the next segment in IPv6 table T
          associated with the SID and forward via
          the matched table entry.
-         The End.T is used for multi-table operation 
+         The End.T is used for multi-table operation
          in the core.";
 
          // TODO presence  "Mandatory child only if container is present";
 
         leaf lookup-table-ipv6 {
           type srv6-types:table-id;
-	  mandatory true;	  
+          mandatory true;
           description
             "Table Id for lookup on updated DA (next segment)";
         }
@@ -378,38 +388,38 @@ module ietf-srv6-static {
       }
       description
         "Endpoint with specific IPv6 table lookup (variant: USP/PSP).
-         Lookup the next segment in IPv6 table T 
+         Lookup the next segment in IPv6 table T
          associated with the SID and forward via
          the matched table entry.
-         The End.T is used for multi-table operation 
+         The End.T is used for multi-table operation
          in the core.";
 
         // TODO presence  "Mandatory child only if container is present";
-	
+
         leaf lookup-table-ipv6 {
           type srv6-types:table-id;
-	  mandatory true;	  
+          mandatory true;
           description
             "Table Id for lookup on updated DA (next segment)";
         }
     }
-    
+
    container end-x {
       when "../end-behavior-type = 'End.X'" {
         description
-          "This container is valid only when the user chooses 
+          "This container is valid only when the user chooses
            End.X behavior (variant: no USP/PSP)";
       }
       description
-        "Endpoint with cross-connect to an array of 
+        "Endpoint with cross-connect to an array of
          layer-3 adjacencies (variant: no USP/PSP).
          Forward to layer-3 adjacency bound to the SID S.
-         The End.X function is required to express any 
+         The End.X function is required to express any
          traffic-engineering policy.";
-	 
+
       leaf protected {
         type boolean;
-	default false;
+        default false;
         description "Is Adj-SID protected?";
       }
 
@@ -419,19 +429,19 @@ module ietf-srv6-static {
    container end-x_psp {
       when "../end-behavior-type = 'End.X_PSP'" {
         description
-          "This container is valid only when the user chooses 
+          "This container is valid only when the user chooses
            End.X behavior (variant: PSP only)";
       }
       description
-        "Endpoint with cross-connect to an array of 
+        "Endpoint with cross-connect to an array of
          layer-3 adjacencies (variant: PSP only).
          Forward to layer-3 adjacency bound to the SID S.
-         The End.X function is required to express any 
+         The End.X function is required to express any
          traffic-engineering policy.";
-	 
+
       leaf protected {
         type boolean;
-	default false;
+        default false;
         description "Is Adj-SID protected?";
       }
 
@@ -441,19 +451,19 @@ module ietf-srv6-static {
    container end-x_usp {
       when "../end-behavior-type = 'End.X_USP'" {
         description
-          "This container is valid only when the user chooses 
+          "This container is valid only when the user chooses
            End.X behavior (variant: USP only)";
       }
       description
-        "Endpoint with cross-connect to an array of 
+        "Endpoint with cross-connect to an array of
          layer-3 adjacencies (variant: USP only).
          Forward to layer-3 adjacency bound to the SID S.
-         The End.X function is required to express any 
+         The End.X function is required to express any
          traffic-engineering policy.";
-	 
+
       leaf protected {
         type boolean;
-	default false;
+        default false;
         description "Is Adj-SID protected?";
       }
 
@@ -463,19 +473,19 @@ module ietf-srv6-static {
    container end-x_psp_usp {
       when "../end-behavior-type = 'End.X_PSP_USP'" {
         description
-          "This container is valid only when the user chooses 
+          "This container is valid only when the user chooses
            End.X behavior (variant: PSP/USP)";
       }
       description
-        "Endpoint with cross-connect to an array of 
+        "Endpoint with cross-connect to an array of
          layer-3 adjacencies (variant: PSP/USP).
          Forward to layer-3 adjacency bound to the SID S.
-         The End.X function is required to express any 
+         The End.X function is required to express any
          traffic-engineering policy.";
-	 
+
       leaf protected {
         type boolean;
-	default false;
+        default false;
         description "Is Adj-SID protected?";
       }
 
@@ -486,17 +496,17 @@ module ietf-srv6-static {
     container end-b6 {
       when "../end-behavior-type = 'End.B6'" {
         description
-          "This container is valid only when the user chooses 
+          "This container is valid only when the user chooses
            End.B6 behavior.";
       }
       description
-        "Endpoint bound to an SRv6 Policy. 
-         Insert SRH based on the policy and forward the 
-         packet toward the first hop configured in the policy. 
+        "Endpoint bound to an SRv6 Policy.
+         Insert SRH based on the policy and forward the
+         packet toward the first hop configured in the policy.
          This is the SRv6 instantiation of a Binding SID.";
 
       // TODO presence  "Mandatory child only if container is present";
-      
+
       leaf policy-name {
         type string;
         mandatory true;
@@ -505,26 +515,26 @@ module ietf-srv6-static {
 
       uses multi-paths-v6;
     }
-    
+
     container end-b6-encaps {
       when "../end-behavior-type = 'End.B6.Encaps'" {
         description
-          "This container is valid only when the user chooses 
+          "This container is valid only when the user chooses
            End_B6_Encaps behavior.";
       }
       description
-        "This is a variation of the End.B6 behavior where 
-         the SRv6 Policy also includes an IPv6 Source 
+        "This is a variation of the End.B6 behavior where
+         the SRv6 Policy also includes an IPv6 Source
          Address.
-         Insert SRH based on the policy and update the 
-         source IP and forward the packet toward the 
+         Insert SRH based on the policy and update the
+         source IP and forward the packet toward the
          first hop configured in the policy.
-         Instead of simply inserting an SRH with the 
-         policy (End.B6), this behavior also adds an 
+         Instead of simply inserting an SRH with the
+         policy (End.B6), this behavior also adds an
          outer IPv6 header.";
 
       // TODO presence  "Mandatory child only if container is present";
-      
+
       leaf policy-name {
         type string;
         mandatory true;
@@ -537,27 +547,27 @@ module ietf-srv6-static {
           "IPv6 source address for Encap.";
       }
 
-      uses multi-paths-v6;      
+      uses multi-paths-v6;
     }
-    
+
     container end-bm {
       when "../end-behavior-type = 'End.BM'" {
         description
-          "This container is valid only when the user chooses 
+          "This container is valid only when the user chooses
            End.BM behavior.";
       }
       description
-        "Endpoint bound to an SR-MPLS Policy. 
-         push an MPLS label stack <L1, L2, L3> on the 
-         received packet and forward the according to 
-         Lable L1. 
+        "Endpoint bound to an SR-MPLS Policy.
+         push an MPLS label stack <L1, L2, L3> on the
+         received packet and forward the according to
+         Lable L1.
          This is an SRv6 instantiation of an SR-MPLS Binding SID.";
 
       // TODO presence  "Mandatory child only if container is present";
-      
+
       leaf policy-name {
         type string;
-	mandatory true;
+        mandatory true;
         description "SRv6 policy name";
       }
       uses multi-paths-mpls;
@@ -566,31 +576,31 @@ module ietf-srv6-static {
     container end-dx6 {
       when "../end-behavior-type = 'End.DX6'" {
         description
-          "This container is valid only when the user chooses 
+          "This container is valid only when the user chooses
            End.DX6 behavior.";
       }
       description
-        "Endpoint with decapsulation and cross-connect to 
-         an array of IPv6 adjacencies. Pop the (outer) 
-         IPv6 header and its extension headers and forward 
-         to layer-3 adjacency bound to the SID S. 
+        "Endpoint with decapsulation and cross-connect to
+         an array of IPv6 adjacencies. Pop the (outer)
+         IPv6 header and its extension headers and forward
+         to layer-3 adjacency bound to the SID S.
          The End.DX6 used in the L3VPN use-case.";
-      
+
       uses multi-paths-v6;
     }
     container end-dx4 {
       when "../end-behavior-type = 'End.DX4'" {
         description
-          "This container is valid only when the user chooses 
+          "This container is valid only when the user chooses
            End.DX4 behavior.";
       }
       description
-        "Endpoint with decapsulation and cross-connect to 
+        "Endpoint with decapsulation and cross-connect to
          an array of IPv4 adjacencies.
          Pop the (outer) IPv6 header and its extension
-         header and forward to layer-3 adjacency bound 
-         to the SID S. 
-         This would be equivalent to the per-CE VPN 
+         header and forward to layer-3 adjacency bound
+         to the SID S.
+         This would be equivalent to the per-CE VPN
          label in MPLS.";
 
       uses multi-paths-v4;
@@ -598,16 +608,16 @@ module ietf-srv6-static {
     container end-dt6 {
       when "../end-behavior-type = 'End.DT6'" {
         description
-          "This container is valid only when the user chooses 
+          "This container is valid only when the user chooses
            End.DT6 behavior.";
       }
       description
-        "Endpoint with decapsulation and specific IPv6 table 
-         lookup. 
-         Pop the (outer) IPv6 header and its extension 
-         headers. 
-         Lookup the exposed inner IPv6 DA in IPv6 
-         table T and forward via the matched table entry. 
+        "Endpoint with decapsulation and specific IPv6 table
+         lookup.
+         Pop the (outer) IPv6 header and its extension
+         headers.
+         Lookup the exposed inner IPv6 DA in IPv6
+         table T and forward via the matched table entry.
          End.DT6 function is used in L3VPN use-case.";
 
       // TODO presence  "Mandatory child only if container is present";
@@ -621,54 +631,54 @@ module ietf-srv6-static {
    container end-dt4 {
       when "../end-behavior-type = 'End.DT4'" {
         description
-          "This container is valid only when the user chooses 
+          "This container is valid only when the user chooses
            End.DT4 behavior.";
       }
       description
-        "Endpoint with decapsulation and specific 
-         IPv4 table lookup. 
-         Pop the (outer) IPv6 header and its extension 
-         headers. 
-         Lookup the exposed inner IPv4 DA in IPv4 
-         table T and forward via the matched table entry. 
-         This would be equivalent to the per-VRF VPN label 
+        "Endpoint with decapsulation and specific
+         IPv4 table lookup.
+         Pop the (outer) IPv6 header and its extension
+         headers.
+         Lookup the exposed inner IPv4 DA in IPv4
+         table T and forward via the matched table entry.
+         This would be equivalent to the per-VRF VPN label
          in MPLS.";
 
          // TODO presence  "Mandatory child only if container is present";
 
       leaf lookup-table-ipv4 {
         type srv6-types:table-id;
-	mandatory true;
+        mandatory true;
         description "IPv4 table";
       }
     }
     container end-dt46 {
       when "../end-behavior-type = 'End.DT46'" {
         description
-          "This container is valid only when the user chooses 
+          "This container is valid only when the user chooses
            End.DT46 behavior.";
       }
       description
-        "Endpoint with decapsulation and specific 
-         IP table lookup. 
-         Depending on the protocol type (IPv4 or IPv6) 
-         of the inner ip packet and the specific VRF name 
+        "Endpoint with decapsulation and specific
+         IP table lookup.
+         Depending on the protocol type (IPv4 or IPv6)
+         of the inner ip packet and the specific VRF name
          forward the packet.
-         This would be equivalent to the per-VRF VPN 
+         This would be equivalent to the per-VRF VPN
          label in MPLS.";
 
       // TODO presence  "Mandatory child only if container is present";
-      
+
       leaf lookup-table-ipv4 {
         type srv6-types:table-id;
-	mandatory true;
+        mandatory true;
         description "IPv4 table";
       }
       leaf lookup-table-ipv6 {
         type srv6-types:table-id;
-	mandatory true;
+        mandatory true;
         description "IPv6 table";
-      }      
+      }
     }
 
    container end-dx2 {
@@ -678,23 +688,23 @@ module ietf-srv6-static {
            End.DX2 behavior.";
       }
       description
-        "This is an Endpoint with decapsulation and Layer-2 
+        "This is an Endpoint with decapsulation and Layer-2
          cross-connect to OIF.
          Pop the (outer) IPv6 header and its extension headers.
          Forward the resulting frame via OIF associated to the SID.
          The End.DX2 function is the L2VPN use-case";
-	 
-	 container paths {
+
+         container paths {
            description "List of outgoing paths";
-       
+
             leaf interface {
               type if:interface-ref;
-	      mandatory true;
+              mandatory true;
              description "Layer-2 cross-connect to Out interface.";
             }
-	}
+        }
     }
-    /* TODO    
+    /* TODO
     container end-dx2v {
       when "../end-behavior-type = 'End.DX2V'" {
         description
@@ -702,14 +712,14 @@ module ietf-srv6-static {
            End.DX2V behavior.";
       }
       description
-        "Endpoint with decapsulation and specific VLAN 
-         L2 table lookup. 
-         Pop the (outer) IPv6 header 
-         and its extension headers lookup the exposed 
-         inner VLANs in L2 table T forward via the 
+        "Endpoint with decapsulation and specific VLAN
+         L2 table lookup.
+         Pop the (outer) IPv6 header
+         and its extension headers lookup the exposed
+         inner VLANs in L2 table T forward via the
          matched table entry.
-         The End.DX2V is used for EVPN Flexible cross-connect 
-         use-cases"; 
+         The End.DX2V is used for EVPN Flexible cross-connect
+         use-cases";
         leaf end-dx2v {
           type empty;
           description
@@ -723,13 +733,13 @@ module ietf-srv6-static {
            End.DT2U behavior.";
       }
       description
-        "Endpoint with decapsulation and specific 
-         unicast MAC L2 table lookup. 
+        "Endpoint with decapsulation and specific
+         unicast MAC L2 table lookup.
          Pop the (outer) IPv6 header and its extension headers.
-         Learn the exposed inner MAC SA in L2 table T. 
-         Lookup the exposed inner MAC DA in L2 table T. 
+         Learn the exposed inner MAC SA in L2 table T.
+         Lookup the exposed inner MAC DA in L2 table T.
          Forward via the matched T entry else to all L2OIF in T.
-         The End.DT2U is used for EVPN Bridging unicast use cases"; 
+         The End.DT2U is used for EVPN Bridging unicast use cases";
         leaf end-dt2u {
           type empty;
           description
@@ -743,11 +753,11 @@ module ietf-srv6-static {
            End.DT2M behavior.";
       }
       description
-        "Endpoint with decapsulation and specific L2 table flooding. 
-         Pop the (outer) IPv6 header and its extension headers. 
-         Learn the exposed inner MAC SA in L2 table T. 
+        "Endpoint with decapsulation and specific L2 table flooding.
+         Pop the (outer) IPv6 header and its extension headers.
+         Learn the exposed inner MAC SA in L2 table T.
          Forward on all L2OIF excluding the one specified in Arg.FE2.
-         The End.DT2M is used for EVPN Bridging BUM use case with 
+         The End.DT2M is used for EVPN Bridging BUM use case with
          ESI filtering capability.";
         leaf end-dt2m {
           type empty;
@@ -771,15 +781,15 @@ module ietf-srv6-static {
   grouping srv6-static-cfg {
     description
       "Grouping configuration and operation for SRv6 sid.";
-	   
+
       list sid {
         key "opcode";
-	description "Local SID list";
-	
+        description "Local SID list";
+
         uses srv6-sid-config;
       }
   }
-    
+
  augment "/rt:routing/srv6:srv6/srv6:locators/srv6:locator" {
      description
       "This augments locator leaf withing SRv6.";
@@ -787,15 +797,15 @@ module ietf-srv6-static {
    container static {
     description "Static SRv6";
 
-    /* Local SIDs */ 
+    /* Local SIDs */
     container local-sids {
-      description 
+      description
            "SRv6-static local-SIDs";
-	   
+
       uses srv6-static-cfg;
       /* no state for now; SID state accessible through base model */
    }
-   
+
   }
  }
 } // module
