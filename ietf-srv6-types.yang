@@ -89,7 +89,7 @@ module ietf-srv6-types {
     description
           "End function (variant: no PSP, no USP).";
     reference
-          "draft-filsfils-spring-srv6-network-programming-04";
+          "draft-ietf-spring-srv6-network-programming-01";
     // RFC Editor: replace with actual RFC number and remove this note
   }
 
@@ -98,7 +98,7 @@ module ietf-srv6-types {
     description
           "End function (variant: PSP only).";
     reference
-          "draft-filsfils-spring-srv6-network-programming-04";
+          "draft-ietf-spring-srv6-network-programming-01";
     // RFC Editor: replace with actual RFC number and remove this note
   }
 
@@ -107,7 +107,7 @@ module ietf-srv6-types {
     description
           "End function (variant: USP only).";
     reference
-          "draft-filsfils-spring-srv6-network-programming-04";
+          "draft-ietf-spring-srv6-network-programming-01";
     // RFC Editor: replace with actual RFC number and remove this note
   }
 
@@ -116,7 +116,7 @@ module ietf-srv6-types {
     description
           "End function (variant: PSP and USP).";
     reference
-          "draft-filsfils-spring-srv6-network-programming-04";
+          "draft-ietf-spring-srv6-network-programming-01";
     // RFC Editor: replace with actual RFC number and remove this note
   }
 
@@ -126,7 +126,7 @@ module ietf-srv6-types {
           "Endpoint with cross-connect to an array
            of layer-3 adjacencies (variant: no PSP, no USP).";
     reference
-          "draft-filsfils-spring-srv6-network-programming-04";
+          "draft-ietf-spring-srv6-network-programming-01";
     // RFC Editor: replace with actual RFC number and remove this note
   }
 
@@ -136,7 +136,7 @@ module ietf-srv6-types {
           "Endpoint with cross-connect to an array
            of layer-3 adjacencies (variant: PSP only).";
     reference
-          "draft-filsfils-spring-srv6-network-programming-04";
+          "draft-ietf-spring-srv6-network-programming-01";
     // RFC Editor: replace with actual RFC number and remove this note
   }
 
@@ -146,7 +146,7 @@ module ietf-srv6-types {
           "Endpoint with cross-connect to an array
            of layer-3 adjacencies (variant: USP only).";
     reference
-          "draft-filsfils-spring-srv6-network-programming-04";
+          "draft-ietf-spring-srv6-network-programming-01";
     // RFC Editor: replace with actual RFC number and remove this note
   }
 
@@ -156,7 +156,7 @@ module ietf-srv6-types {
           "Endpoint with cross-connect to an array
            of layer-3 adjacencies (variant: PSP and USP).";
     reference
-          "draft-filsfils-spring-srv6-network-programming-04";
+          "draft-ietf-spring-srv6-network-programming-01";
     // RFC Editor: replace with actual RFC number and remove this note
   }
 
@@ -166,7 +166,7 @@ module ietf-srv6-types {
           "Endpoint with specific IPv6 table lookup
           (variant: no PSP, no USP).";
     reference
-          "draft-filsfils-spring-srv6-network-programming-04";
+          "draft-ietf-spring-srv6-network-programming-01";
     // RFC Editor: replace with actual RFC number and remove this note
   }
 
@@ -176,7 +176,7 @@ module ietf-srv6-types {
           "Endpoint with specific IPv6 table lookup
           (variant: PSP only).";
     reference
-          "draft-filsfils-spring-srv6-network-programming-04";
+          "draft-ietf-spring-srv6-network-programming-01";
     // RFC Editor: replace with actual RFC number and remove this note
   }
 
@@ -186,7 +186,7 @@ module ietf-srv6-types {
           "Endpoint with specific IPv6 table lookup
            (variant: USP only).";
     reference
-          "draft-filsfils-spring-srv6-network-programming-04";
+          "draft-ietf-spring-srv6-network-programming-01";
     // RFC Editor: replace with actual RFC number and remove this note
   }
 
@@ -196,27 +196,27 @@ module ietf-srv6-types {
           "Endpoint with specific IPv6 table lookup
            (variant: PSP and USP).";
     reference
-          "draft-filsfils-spring-srv6-network-programming-04";
+          "draft-ietf-spring-srv6-network-programming-01";
     // RFC Editor: replace with actual RFC number and remove this note
   }
 
-  identity End.B6 {
+  identity End.B6.Insert {
     base srv6-endpoint-type;
     description
           "Endpoint bound to an SRv6 Policy";
     reference
-          "draft-filsfils-spring-srv6-network-programming-04";
+          "draft-ietf-spring-srv6-network-programming-01";
     // RFC Editor: replace with actual RFC number and remove this note
   }
-
+   
   identity End.B6.Encaps {
     base srv6-endpoint-type;
     description
-         "This is a variation of the End.B6 behavior
+         "This is a variation of the End.B6.Insert behavior
           where the SRv6 Policy also includes an
           IPv6 Source Address A.";
     reference
-          "draft-filsfils-spring-srv6-network-programming-04";
+          "draft-ietf-spring-srv6-network-programming-01";
     // RFC Editor: replace with actual RFC number and remove this note
    }
 
@@ -225,7 +225,7 @@ module ietf-srv6-types {
      description
           "Endpoint bound to an SR-MPLS Policy";
     reference
-          "draft-filsfils-spring-srv6-network-programming-04";
+          "draft-ietf-spring-srv6-network-programming-01";
     // RFC Editor: replace with actual RFC number and remove this note
    }
 
@@ -235,7 +235,7 @@ module ietf-srv6-types {
           "Endpoint with decapsulation and cross-connect
            to an array of IPv6 adjacencies";
      reference
-          "draft-filsfils-spring-srv6-network-programming-04";
+          "draft-ietf-spring-srv6-network-programming-01";
     // RFC Editor: replace with actual RFC number and remove this note
    }
 
@@ -245,7 +245,7 @@ module ietf-srv6-types {
           "Endpoint with decapsulation and cross-connect
            to an array of IPv4 adjacencies";
      reference
-          "draft-filsfils-spring-srv6-network-programming-04";
+          "draft-ietf-spring-srv6-network-programming-01";
     // RFC Editor: replace with actual RFC number and remove this note
    }
 
@@ -255,7 +255,7 @@ module ietf-srv6-types {
           "Endpoint with decapsulation and specific
            IPv6 table lookup";
      reference
-          "draft-filsfils-spring-srv6-network-programming-04";
+          "draft-ietf-spring-srv6-network-programming-01";
     // RFC Editor: replace with actual RFC number and remove this note
    }
 
@@ -265,7 +265,7 @@ module ietf-srv6-types {
           "Endpoint with decapsulation and specific
            IPv4 table lookup";
      reference
-          "draft-filsfils-spring-srv6-network-programming-04";
+          "draft-ietf-spring-srv6-network-programming-01";
     // RFC Editor: replace with actual RFC number and remove this note
    }
 
@@ -275,7 +275,7 @@ module ietf-srv6-types {
           "Endpoint with decapsulation and specific IP
            (IPv4 or IPv6) table lookup";
      reference
-          "draft-filsfils-spring-srv6-network-programming-04";
+          "draft-ietf-spring-srv6-network-programming-01";
     // RFC Editor: replace with actual RFC number and remove this note
    }
 
@@ -285,7 +285,7 @@ module ietf-srv6-types {
           "Endpoint with decapsulation and Layer-2
            cross-connect to an L2 interface";
      reference
-          "draft-filsfils-spring-srv6-network-programming-04";
+          "draft-ietf-spring-srv6-network-programming-01";
     // RFC Editor: replace with actual RFC number and remove this note
    }
 
@@ -295,7 +295,7 @@ module ietf-srv6-types {
           "Endpoint with decapsulation and specific
            VLAN L2 table lookup";
      reference
-          "draft-filsfils-spring-srv6-network-programming-04";
+          "draft-ietf-spring-srv6-network-programming-01";
     // RFC Editor: replace with actual RFC number and remove this note
    }
 
@@ -305,7 +305,7 @@ module ietf-srv6-types {
           "Endpoint with decapsulation and specific
            unicast MAC L2 table lookup";
      reference
-          "draft-filsfils-spring-srv6-network-programming-04";
+          "draft-ietf-spring-srv6-network-programming-01";
     // RFC Editor: replace with actual RFC number and remove this note
    }
 
@@ -315,7 +315,7 @@ module ietf-srv6-types {
           "Endpoint with decapsulation and specific L2 table
            flooding";
      reference
-          "draft-filsfils-spring-srv6-network-programming-04";
+          "draft-ietf-spring-srv6-network-programming-01";
     // RFC Editor: replace with actual RFC number and remove this note
    }
 
@@ -324,7 +324,7 @@ module ietf-srv6-types {
      description
           "Endpoint for OAM operation of timestamp and punt";
      reference
-          "draft-filsfils-spring-srv6-network-programming-04";
+          "draft-ietf-spring-srv6-network-programming-01";
     // RFC Editor: replace with actual RFC number and remove this note
    }
 
@@ -333,7 +333,141 @@ module ietf-srv6-types {
      description
             "Endpoint in search of a target in table TE";
      reference
-          "draft-filsfils-spring-srv6-network-programming-04";
+          "draft-ietf-spring-srv6-network-programming-01";
+    // RFC Editor: replace with actual RFC number and remove this note
+   }
+
+  identity End.B6.Insert.Red {
+     base srv6-endpoint-type;
+     description
+          "This is a reduced insert variation of the End.B6.Insert behavior";
+     reference
+          "draft-ietf-spring-srv6-network-programming-01";
+    // RFC Editor: replace with actual RFC number and remove this note
+  }
+
+   identity End.B6.Encaps.Red {
+     base srv6-endpoint-type;
+     description
+          "This is a reduced encap variation of the End.B6.Encap behavior.";
+     reference
+          "draft-ietf-spring-srv6-network-programming-01";
+    // RFC Editor: replace with actual RFC number and remove this note
+   }
+
+   identity End_USD {
+     base srv6-endpoint-type;
+     description
+          "End function (variant: USD).";
+     reference
+          "draft-ietf-spring-srv6-network-programming-01";
+    // RFC Editor: replace with actual RFC number and remove this note
+   }
+
+   identity End.PSP_USD {
+     base srv6-endpoint-type;
+     description
+          "End function (variant: PSP and USD).";
+     reference
+          "draft-ietf-spring-srv6-network-programming-01";
+    // RFC Editor: replace with actual RFC number and remove this note
+   }
+
+   identity End.USP_USD {
+     base srv6-endpoint-type;
+     description
+          "End function (variant: USP and USD).";
+     reference
+          "draft-ietf-spring-srv6-network-programming-01";
+    // RFC Editor: replace with actual RFC number and remove this note
+   }
+
+   identity End.PSP_USP_USD {
+     base srv6-endpoint-type;
+     description
+          "End function (variant: PSP and USP and USD).";
+     reference
+          "draft-ietf-spring-srv6-network-programming-01";
+    // RFC Editor: replace with actual RFC number and remove this note
+   }
+
+   identity End.X_USD {
+     base srv6-endpoint-type;
+     description
+          "Endpoint with cross-connect to an array
+           of layer-3 adjacencies (variant: USD).";
+     reference
+          "draft-ietf-spring-srv6-network-programming-01";
+    // RFC Editor: replace with actual RFC number and remove this note
+   }
+
+   identity End.X_PSP_USD {
+     base srv6-endpoint-type;
+     description
+          "Endpoint with cross-connect to an array
+           of layer-3 adjacencies (variant: PSP and USD).";
+     reference
+          "draft-ietf-spring-srv6-network-programming-01";
+    // RFC Editor: replace with actual RFC number and remove this note
+   }
+
+   identity End.X_USP_USD {
+     base srv6-endpoint-type;
+     description
+          "Endpoint with cross-connect to an array
+           of layer-3 adjacencies (variant: USP and USD).";
+     reference
+          "draft-ietf-spring-srv6-network-programming-01";
+    // RFC Editor: replace with actual RFC number and remove this note
+   }
+
+   identity End.X_PSP_USP_USD {
+     base srv6-endpoint-type;
+     description
+          "Endpoint with cross-connect to an array
+           of layer-3 adjacencies (variant: PSP and USP and USD).";
+     reference
+          "draft-ietf-spring-srv6-network-programming-01";
+    // RFC Editor: replace with actual RFC number and remove this note
+   }
+
+   identity End.T_USD {
+     base srv6-endpoint-type;
+     description
+          "Endpoint with decapsulation and Layer-2
+           cross-connect to an L2 interface";
+     reference
+          "draft-ietf-spring-srv6-network-programming-01";
+    // RFC Editor: replace with actual RFC number and remove this note
+   }
+
+   identity End.T_PSP_USD {
+     base srv6-endpoint-type;
+     description
+          "Endpoint with specific IPv6 table lookup
+	   (variant: PSP and USD).";
+     reference
+          "draft-ietf-spring-srv6-network-programming-01";
+    // RFC Editor: replace with actual RFC number and remove this note
+   }
+
+   identity End.T_USP_USD {
+     base srv6-endpoint-type;
+     description
+          "Endpoint with specific IPv6 table lookup
+	   (variant: USP and USD).";
+     reference
+          "draft-ietf-spring-srv6-network-programming-01";
+    // RFC Editor: replace with actual RFC number and remove this note
+   }
+
+   identity End.T_PSP_USP_USD {
+     base srv6-endpoint-type;
+     description
+          "Endpoint with specific IPv6 table lookup
+	   (variant: PSP and USP and USD).";
+     reference
+          "draft-ietf-spring-srv6-network-programming-01";
     // RFC Editor: replace with actual RFC number and remove this note
    }
 
@@ -425,56 +559,137 @@ module ietf-srv6-types {
     // RFC Editor: replace with actual RFC number and remove this note
    }
 
-  typedef srv6-transit-type {
+   identity srv6-transit-type {
+     description
+        "Base identity from which SRv6 transit rule types are derived.";
+   }
 
-    type enumeration {
-      /* draft-filsfils-spring-srv6-network-programming-04 */
-      enum T { value 1; description "Transit behavior"; }
-      enum T.Insert {
-         description "Transit behavior with insertion of an SRv6 policy";
-      }
-      enum T.Insert.Red {
-         description "Transit behavior with reduced insertion of an SRv6 policy";
-      }
-      enum T.Encaps {
-         description "Transit behavior with encap of an SRv6 policy";
-      }
-      enum T.Encaps.Red {
-         description "Transit behavior with reduced encap of an SRv6 policy";
-      }
-      enum T.Encaps.L2 {
-         description "T.Encaps behavior on the received L2 frame";
-      }
-      enum T.Encaps.L2.Red {
-         description "T.Encaps.Red behavior on the received L2 frame";
-      }
-    }
+   identity T {
+     base srv6-transit-type;
+     description
+         "Transit rule T";
+     reference
+          "draft-ietf-spring-srv6-network-programming-01";
+    // RFC Editor: replace with actual RFC number and remove this note
+   }
 
-    description "SRv6 Transit behavior types";
+   identity T.Insert {
+     base srv6-transit-type;
+     description
+         "Transit rule T.Insert with insertion of an SRv6 policy";
+     reference
+          "draft-ietf-spring-srv6-network-programming-01";
+    // RFC Editor: replace with actual RFC number and remove this note
+   }
+
+   identity T.Insert.Red {
+     base srv6-transit-type;
+     description
+         "Transit rule T.Insert.Red with reduced insertion of an SRv6 policy";
+     reference
+          "draft-ietf-spring-srv6-network-programming-01";
+    // RFC Editor: replace with actual RFC number and remove this note
+   }
+
+   identity T.Encaps {
+     base srv6-transit-type;
+     description
+         "Transit rule T.Encaps with encapsulated of an SRv6 policy";
+     reference
+          "draft-ietf-spring-srv6-network-programming-01";
+    // RFC Editor: replace with actual RFC number and remove this note
+   }
+
+   identity T.Encaps.Red {
+     base srv6-transit-type;
+     description
+         "Transit rule T.Encaps.Red with reduced encap of an SRv6 policy";
+     reference
+          "draft-ietf-spring-srv6-network-programming-01";
+    // RFC Editor: replace with actual RFC number and remove this note
+   }
+
+   identity T.Encaps.L2 {
+     base srv6-transit-type;
+     description
+         "Transit rule T.Encaps.l2 on the received L2 frame";
+     reference
+          "draft-ietf-spring-srv6-network-programming-01";
+    // RFC Editor: replace with actual RFC number and remove this note
+   }
+
+   identity T.Encaps.L2.Red {
+     base srv6-transit-type;
+     description
+         "Transit rule T.Encaps.L2.Red on the received L2 frame";
+     reference
+          "draft-ietf-spring-srv6-network-programming-01";
+    // RFC Editor: replace with actual RFC number and remove this note
+   }
+
+  identity srv6-security-type {
+     description
+        "Base identity from which SRv6 Security rule types are derived.";
   }
 
-  typedef srv6-security-rule-type {
-    type enumeration {
-      /* draft-filsfils-spring-srv6-network-programming-04 */
-      enum SEC1 { value 1; description "Security rule SEC1"; }
-      enum SEC2 { description "Security rule SEC2"; }
-      enum SEC3 { description "Security rule SEC3"; }
-      enum SEC4 { description "Security rule SEC4"; }
-    }
+  identity SEC-1 {
+     base srv6-security-type;
+     description
+         "Security rule SEC-1";
+     reference
+          "draft-ietf-spring-srv6-network-programming-01";
+    // RFC Editor: replace with actual RFC number and remove this note
+   }
 
-    description "SRv6 Security rule types";
+  identity SEC-2 {
+     base srv6-security-type;
+     description
+         "Security rule SEC-2";
+     reference
+          "draft-ietf-spring-srv6-network-programming-01";
+    // RFC Editor: replace with actual RFC number and remove this note
+  }
+   
+  identity SEC-3 {
+     base srv6-security-type;
+     description
+         "Security rule SEC-3";
+     reference
+          "draft-ietf-spring-srv6-network-programming-01";
+    // RFC Editor: replace with actual RFC number and remove this note
+  }
+   
+  identity srv6-counter-type {
+     description
+        "Base identity from which SRv6 counter types are derived.";
   }
 
-  typedef srv6-counter-type {
-    type enumeration {
-      /* draft-filsfils-spring-srv6-network-programming-04 */
-      enum CNT1 { value 1; description "CNT1"; }
-      enum CNT2 { description "CNT2"; }
-      enum CNT3 { description "CNT3"; }
-    }
+  identity CNT-1 {
+     base srv6-counter-type;
+     description
+         "Counter rule CNT-1";
+     reference
+          "draft-ietf-spring-srv6-network-programming-01";
+    // RFC Editor: replace with actual RFC number and remove this note
+   }
 
-    description "SRv6 counter types";
-  }
+   identity CNT-2 {
+      base srv6-counter-type;
+      description
+          "Counter rule CNT-2";
+      reference
+          "draft-ietf-spring-srv6-network-programming-01";
+    // RFC Editor: replace with actual RFC number and remove this note
+   }
+
+  identity CNT-3 {
+     base srv6-counter-type;
+     description
+         "Counter rule CNT-3";
+     reference
+          "draft-ietf-spring-srv6-network-programming-01";
+    // RFC Editor: replace with actual RFC number and remove this note
+   }
 
   typedef srv6-sid {
       type inet:ipv6-prefix;

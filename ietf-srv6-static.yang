@@ -493,11 +493,11 @@ module ietf-srv6-static {
     }
 
 
-    container end-b6 {
-      when "../end-behavior-type = 'End.B6'" {
+    container end-b6-insert {
+      when "../end-behavior-type = 'End.B6.Insert'" {
         description
           "This container is valid only when the user chooses
-           End.B6 behavior.";
+           End.B6.Insert behavior.";
       }
       description
         "Endpoint bound to an SRv6 Policy.
@@ -784,7 +784,7 @@ module ietf-srv6-static {
 
       list sid {
         key "opcode";
-        description "Local SID list";
+        description "List of locally instantiated SIDs";
 
         uses srv6-sid-config;
       }
@@ -792,7 +792,7 @@ module ietf-srv6-static {
 
  augment "/rt:routing/srv6:srv6/srv6:locators/srv6:locator" {
      description
-      "This augments locator leaf withing SRv6.";
+      "This augments locator leaf within SRv6.";
 
    container static {
     description "Static SRv6";
@@ -800,7 +800,7 @@ module ietf-srv6-static {
     /* Local SIDs */
     container local-sids {
       description
-           "SRv6-static local-SIDs";
+           "SRv6-static locally instantiated SIDs";
 
       uses srv6-static-cfg;
       /* no state for now; SID state accessible through base model */

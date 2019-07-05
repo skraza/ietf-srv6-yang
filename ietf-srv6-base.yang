@@ -468,21 +468,23 @@ module ietf-srv6-base {
   grouping srv6-support-transits {
     description "SRv6 Transit behavior support grouping";
 
-   list transit-behavior {
-     key "type";
-     description "Transit behavior support";
+    list transit-behavior {
+      key "type";
+      description "Transit behavior support";
 
-     leaf type {
-       type srv6-types:srv6-transit-type;
-       description "Transit behavior (T*) type";
-     }
+      leaf type {
+        type identityref {
+          base srv6-types:srv6-transit-type;
+        }
+        description "Transit behavior (T*) type";
+      }
      leaf supported {
        type boolean;
        mandatory true;
        description "True if supported";
      }
     }
-   }
+  }
 
   grouping srv6-support-signaled {
     description "SRv6 signaled parameter support grouping";
@@ -533,7 +535,9 @@ module ietf-srv6-base {
      description "Security rule support";
 
      leaf type {
-       type srv6-types:srv6-security-rule-type;
+       type identityref {
+         base srv6-types:srv6-security-type;
+       }
        description "Security rule type";
      }
      leaf supported {
@@ -552,7 +556,9 @@ module ietf-srv6-base {
      description "SRv6 counter support";
 
      leaf type {
-       type srv6-types:srv6-counter-type;
+       type identityref {
+         base srv6-types:srv6-counter-type;
+       }
        description "Counter type";
      }
      leaf supported {

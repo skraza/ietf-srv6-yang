@@ -69,7 +69,7 @@ module: ietf-srv6-static
              |        +--rw encap
              |           +--rw out-sid* [sid]
              |              +--rw sid    srv6-types:srv6-sid
-             +--rw end-b6
+             +--rw end-b6-insert
              |  +--rw policy-name    string
              |  +--rw paths
              |     +--rw path* [path-index]
