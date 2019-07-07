@@ -9,6 +9,10 @@ module: ietf-srv6-static
              +--rw end_psp
              +--rw end_usp
              +--rw end_psp_usp
+             +--rw end_usd
+             +--rw end_psp_usd
+             +--rw end_usp_usd
+             +--rw end_psp_usp_usd
              +--rw end-t
              |  +--rw lookup-table-ipv6    srv6-types:table-id
              +--rw end-t_psp
@@ -16,6 +20,14 @@ module: ietf-srv6-static
              +--rw end-t_usp
              |  +--rw lookup-table-ipv6    srv6-types:table-id
              +--rw end-t_psp_usp
+             |  +--rw lookup-table-ipv6    srv6-types:table-id
+             +--rw end-t_usd
+             |  +--rw lookup-table-ipv6    srv6-types:table-id
+             +--rw end-t_psp_usd
+             |  +--rw lookup-table-ipv6    srv6-types:table-id
+             +--rw end-t_usp_usd
+             |  +--rw lookup-table-ipv6    srv6-types:table-id
+             +--rw end-t_psp_usp_usd
              |  +--rw lookup-table-ipv6    srv6-types:table-id
              +--rw end-x
              |  +--rw protected?   boolean
@@ -57,6 +69,58 @@ module: ietf-srv6-static
              |           +--rw out-sid* [sid]
              |              +--rw sid    srv6-types:srv6-sid
              +--rw end-x_psp_usp
+             |  +--rw protected?   boolean
+             |  +--rw paths
+             |     +--rw path* [path-index]
+             |        +--rw path-index           uint8
+             |        +--rw interface?           if:interface-ref
+             |        +--rw next-hop?            inet:ipv6-address
+             |        +--rw weight?              uint32
+             |        +--rw role?                enumeration
+             |        +--rw backup-path-index?   uint8
+             |        +--rw encap
+             |           +--rw out-sid* [sid]
+             |              +--rw sid    srv6-types:srv6-sid
+             +--rw end-x_usd
+             |  +--rw protected?   boolean
+             |  +--rw paths
+             |     +--rw path* [path-index]
+             |        +--rw path-index           uint8
+             |        +--rw interface?           if:interface-ref
+             |        +--rw next-hop?            inet:ipv6-address
+             |        +--rw weight?              uint32
+             |        +--rw role?                enumeration
+             |        +--rw backup-path-index?   uint8
+             |        +--rw encap
+             |           +--rw out-sid* [sid]
+             |              +--rw sid    srv6-types:srv6-sid
+             +--rw end-x_psp_usd
+             |  +--rw protected?   boolean
+             |  +--rw paths
+             |     +--rw path* [path-index]
+             |        +--rw path-index           uint8
+             |        +--rw interface?           if:interface-ref
+             |        +--rw next-hop?            inet:ipv6-address
+             |        +--rw weight?              uint32
+             |        +--rw role?                enumeration
+             |        +--rw backup-path-index?   uint8
+             |        +--rw encap
+             |           +--rw out-sid* [sid]
+             |              +--rw sid    srv6-types:srv6-sid
+             +--rw end-x_usp_usd
+             |  +--rw protected?   boolean
+             |  +--rw paths
+             |     +--rw path* [path-index]
+             |        +--rw path-index           uint8
+             |        +--rw interface?           if:interface-ref
+             |        +--rw next-hop?            inet:ipv6-address
+             |        +--rw weight?              uint32
+             |        +--rw role?                enumeration
+             |        +--rw backup-path-index?   uint8
+             |        +--rw encap
+             |           +--rw out-sid* [sid]
+             |              +--rw sid    srv6-types:srv6-sid
+             +--rw end-x_psp_usp_usd
              |  +--rw protected?   boolean
              |  +--rw paths
              |     +--rw path* [path-index]

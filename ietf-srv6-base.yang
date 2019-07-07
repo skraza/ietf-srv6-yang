@@ -94,6 +94,15 @@ module ietf-srv6-base {
 
   reference "RFC XXXX";
 
+  revision 2019-07-08 {
+    description
+      "Alignment with SRv6 network programming";
+    reference
+      "RFC XXXX: YANG Data Model for SRv6";
+    // RFC Editor: replace XXXX with actual RFC number and remove
+    // this note
+  }
+  
   revision 2018-10-22 {
     description
       "Initial revision.";
@@ -102,7 +111,7 @@ module ietf-srv6-base {
     // RFC Editor: replace XXXX with actual RFC number and remove
     // this note
   }
-
+  
 /*
  * Common
  */
@@ -226,11 +235,6 @@ module ietf-srv6-base {
           default false;
           description "Enable a SRv6 locator";
         }
-        leaf is-default {
-          type boolean;
-          mandatory true;
-          description "Indicates if the locator is a default locator";
-        }
 
         container prefix {
           description "Specify locator prefix value";
@@ -245,6 +249,15 @@ module ietf-srv6-base {
             description "Locator (prefix) length";
           }
         }
+
+        leaf algorithm {
+          type uint32 {
+            range "128..255";
+          }
+
+	  description "Algorithm Id (for Flex-Algo)";
+	}
+	
         uses srv6-locator-state;
       }
     }
@@ -376,7 +389,7 @@ module ietf-srv6-base {
      container counters {
          description "SRv6 counters";
 
-         container cnt3 {
+         container cnt-3 {
            description "Counts SRv6 traffic received/dropped on local prefix not instantiated as local-SID";
            uses srv6-stats-in;
          }
@@ -391,7 +404,7 @@ module ietf-srv6-base {
         description "Local SID value";
        }
 
-       uses srv6-locator-ref;
+       uses srv6-locator;
 
        leaf is-reserved {
          type boolean;
@@ -435,7 +448,7 @@ module ietf-srv6-base {
        container counters {
          description "SRv6 per local-SID counters";
 
-         container cnt1 {
+         container cnt-1 {
            description "Counts SRv6 traffic received on local-SID prefix and processed successfully";
            uses srv6-stats-in;
          }
@@ -606,10 +619,10 @@ module ietf-srv6-base {
 
  /* Notifications */
 
-  grouping srv6-locator-ref {
+  grouping srv6-locator {
     description
       "An absolute reference to an SRv6 locator";
-    leaf locator-ref {
+    leaf locator {
       type leafref {
         path "/rt:routing/srv6:srv6/srv6:locators/srv6:locator/srv6:name";
       }
@@ -625,7 +638,7 @@ module ietf-srv6-base {
       type srv6-types:srv6-status-type;
       description "Operational status";
     }
-    uses srv6-locator-ref;
+    uses srv6-locator;
   }
 
   notification srv6-sid-collision-event {

@@ -68,6 +68,15 @@ module ietf-srv6-types {
      // RFC Editor: replace XXXX with actual RFC number and remove
      // this note
 
+  revision 2019-07-08 {
+    description
+      "Alignment with latest SRv6 network programming";
+    reference
+      "RFC XXXX: YANG Data Model for SRv6";
+     // RFC Editor: replace XXXX with actual RFC number and remove
+     // this note
+  }
+  
   revision 2018-10-22 {
     description
       "Initial revision.";

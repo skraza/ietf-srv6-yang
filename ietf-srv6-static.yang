@@ -95,6 +95,15 @@ module ietf-srv6-static {
     // RFC Editor: replace XXXX with actual RFC number and remove
      // this note
 
+  revision 2019-07-08 {
+    description
+      "Alignment with SRv6 network programming";
+    reference
+      "RFC XXXX: YANG Data Model for SRv6";
+    // RFC Editor: replace XXXX with actual RFC number and remove
+    // this note
+  }
+  
   revision 2018-10-22 {
     description
       "Initial revision.";
@@ -103,7 +112,7 @@ module ietf-srv6-static {
     // RFC Editor: replace XXXX with actual RFC number and remove
     // this note
   }
-
+  
  /*
   * Config and State
   */
@@ -307,6 +316,66 @@ module ietf-srv6-static {
 
     }
 
+    container end_usd {
+      when "../end-behavior-type = 'End_USD'" {
+        description
+          "This container is valid only when the user chooses End
+           behavior (variant: USD only).";
+      }
+      description
+        "The Endpoint function is the most basic function.
+         FIB lookup on updated DA and forward accordingly
+         to the matched entry.
+         This is the SRv6 instantiation of a Prefix SID
+         (variant: USD)";
+
+    }
+
+    container end_psp_usd {
+      when "../end-behavior-type = 'End_PSP_USD'" {
+        description
+          "This container is valid only when the user chooses End
+           behavior (variant: PSP/USD).";
+      }
+      description
+        "The Endpoint function is the most basic function.
+         FIB lookup on updated DA and forward accordingly
+         to the matched entry.
+         This is the SRv6 instantiation of a Prefix SID
+         (variant: PSP/USD)";
+
+    }
+
+    container end_usp_usd {
+      when "../end-behavior-type = 'End_USP_USD'" {
+        description
+          "This container is valid only when the user chooses End
+           behavior (variant: USP/USD).";
+      }
+      description
+        "The Endpoint function is the most basic function.
+         FIB lookup on updated DA and forward accordingly
+         to the matched entry.
+         This is the SRv6 instantiation of a Prefix SID
+         (variant: USP/USD)";
+
+    }
+
+    container end_psp_usp_usd {
+      when "../end-behavior-type = 'End_PSP_USP_IUSD'" {
+        description
+          "This container is valid only when the user chooses End
+           behavior (variant: PSP/USP/USD).";
+      }
+      description
+        "The Endpoint function is the most basic function.
+         FIB lookup on updated DA and forward accordingly
+         to the matched entry.
+         This is the SRv6 instantiation of a Prefix SID
+         (variant: PSP/USP/USD)";
+
+    }
+    
     container end-t {
       when "../end-behavior-type = 'End.T'" {
         description
@@ -355,7 +424,6 @@ module ietf-srv6-static {
         }
     }
 
-
     container end-t_usp {
       when "../end-behavior-type = 'End.T_USP'" {
         description
@@ -395,6 +463,102 @@ module ietf-srv6-static {
          in the core.";
 
         // TODO presence  "Mandatory child only if container is present";
+
+        leaf lookup-table-ipv6 {
+          type srv6-types:table-id;
+          mandatory true;
+          description
+            "Table Id for lookup on updated DA (next segment)";
+        }
+    }
+
+    container end-t_usd {
+      when "../end-behavior-type = 'End.T_USD'" {
+        description
+          "This container is valid only when the user chooses
+           End.T behavior (variant: USD only).";
+      }
+      description
+        "Endpoint with specific IPv6 table lookup (variant: USD only).
+         Lookup the next segment in IPv6 table T
+         associated with the SID and forward via
+         the matched table entry.
+         The End.T is used for multi-table operation
+         in the core.";
+
+         // TODO presence  "Mandatory child only if container is present";
+
+        leaf lookup-table-ipv6 {
+          type srv6-types:table-id;
+          mandatory true;
+          description
+            "Table Id for lookup on updated DA (next segment)";
+        }
+    }
+
+    container end-t_psp_usd {
+      when "../end-behavior-type = 'End.T_PSP_USD'" {
+        description
+          "This container is valid only when the user chooses
+           End.T behavior (variant: PSP/USD only).";
+      }
+      description
+        "Endpoint with specific IPv6 table lookup (variant: PSP/USD only).
+         Lookup the next segment in IPv6 table T
+         associated with the SID and forward via
+         the matched table entry.
+         The End.T is used for multi-table operation
+         in the core.";
+
+         // TODO presence  "Mandatory child only if container is present";
+
+        leaf lookup-table-ipv6 {
+          type srv6-types:table-id;
+          mandatory true;
+          description
+            "Table Id for lookup on updated DA (next segment)";
+        }
+    }
+
+    container end-t_usp_usd {
+      when "../end-behavior-type = 'End.T_USP_USD'" {
+        description
+          "This container is valid only when the user chooses
+           End.T behavior (variant: USP/USD only).";
+      }
+      description
+        "Endpoint with specific IPv6 table lookup (variant: USP/USD only).
+         Lookup the next segment in IPv6 table T
+         associated with the SID and forward via
+         the matched table entry.
+         The End.T is used for multi-table operation
+         in the core.";
+
+         // TODO presence  "Mandatory child only if container is present";
+
+        leaf lookup-table-ipv6 {
+          type srv6-types:table-id;
+          mandatory true;
+          description
+            "Table Id for lookup on updated DA (next segment)";
+        }
+    }
+
+    container end-t_psp_usp_usd {
+      when "../end-behavior-type = 'End.T_PSP_USP_USD'" {
+        description
+          "This container is valid only when the user chooses
+           End.T behavior (variant: USP only).";
+      }
+      description
+        "Endpoint with specific IPv6 table lookup (variant: PSP/USP/USD only).
+         Lookup the next segment in IPv6 table T
+         associated with the SID and forward via
+         the matched table entry.
+         The End.T is used for multi-table operation
+         in the core.";
+
+         // TODO presence  "Mandatory child only if container is present";
 
         leaf lookup-table-ipv6 {
           type srv6-types:table-id;
@@ -493,6 +657,94 @@ module ietf-srv6-static {
     }
 
 
+   container end-x_usd {
+      when "../end-behavior-type = 'End.X_USD'" {
+        description
+          "This container is valid only when the user chooses
+           End.X behavior (variant: USD only)";
+      }
+      description
+        "Endpoint with cross-connect to an array of
+         layer-3 adjacencies (variant: PSP/USP).
+         Forward to layer-3 adjacency bound to the SID S.
+         The End.X function is required to express any
+         traffic-engineering policy.";
+
+      leaf protected {
+        type boolean;
+        default false;
+        description "Is Adj-SID protected?";
+      }
+
+      uses multi-paths-v6;
+    }
+
+   container end-x_psp_usd {
+      when "../end-behavior-type = 'End.X_PSP_USD'" {
+        description
+          "This container is valid only when the user chooses
+           End.X behavior (variant: PSP/USD only)";
+      }
+      description
+        "Endpoint with cross-connect to an array of
+         layer-3 adjacencies (variant: PSP/USP).
+         Forward to layer-3 adjacency bound to the SID S.
+         The End.X function is required to express any
+         traffic-engineering policy.";
+
+      leaf protected {
+        type boolean;
+        default false;
+        description "Is Adj-SID protected?";
+      }
+
+      uses multi-paths-v6;
+    }
+
+   container end-x_usp_usd {
+      when "../end-behavior-type = 'End.X_USP_USD'" {
+        description
+          "This container is valid only when the user chooses
+           End.X behavior (variant: USP/USD only)";
+      }
+      description
+        "Endpoint with cross-connect to an array of
+         layer-3 adjacencies (variant: PSP/USP).
+         Forward to layer-3 adjacency bound to the SID S.
+         The End.X function is required to express any
+         traffic-engineering policy.";
+
+      leaf protected {
+        type boolean;
+        default false;
+        description "Is Adj-SID protected?";
+      }
+
+      uses multi-paths-v6;
+    }
+
+   container end-x_psp_usp_usd {
+      when "../end-behavior-type = 'End.X_PSP_USP_USD'" {
+        description
+          "This container is valid only when the user chooses
+           End.X behavior (variant: PSP/USP/USD only)";
+      }
+      description
+        "Endpoint with cross-connect to an array of
+         layer-3 adjacencies (variant: PSP/USP).
+         Forward to layer-3 adjacency bound to the SID S.
+         The End.X function is required to express any
+         traffic-engineering policy.";
+
+      leaf protected {
+        type boolean;
+        default false;
+        description "Is Adj-SID protected?";
+      }
+
+      uses multi-paths-v6;
+    }
+    
     container end-b6-insert {
       when "../end-behavior-type = 'End.B6.Insert'" {
         description

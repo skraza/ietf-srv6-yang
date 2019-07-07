@@ -9,156 +9,12 @@ module: ietf-srv6-base
        |  +--rw locator* [name]
        |     +--rw name                      string
        |     +--rw enable?                   boolean
-       |     +--rw is-default                boolean
        |     +--rw prefix
        |     |  +--rw address    inet:ipv6-address
        |     |  +--rw length     srv6-types:srv6-locator-len
+       |     +--rw algorithm?                uint32
        |     +--ro operational-status?       srv6-types:srv6-status-type
        |     +--ro is-in-address-conflict?   boolean
-       |     +--rw srv6-static:static
-       |        +--rw srv6-static:local-sids
-       |           +--rw srv6-static:sid* [opcode]
-       |              +--rw srv6-static:opcode               srv6-types:srv6-func-opcode-unreserved
-       |              +--rw srv6-static:end-behavior-type    identityref
-       |              +--rw srv6-static:end
-       |              +--rw srv6-static:end_psp
-       |              +--rw srv6-static:end_usp
-       |              +--rw srv6-static:end_psp_usp
-       |              +--rw srv6-static:end-t
-       |              |  +--rw srv6-static:lookup-table-ipv6    srv6-types:table-id
-       |              +--rw srv6-static:end-t_psp
-       |              |  +--rw srv6-static:lookup-table-ipv6    srv6-types:table-id
-       |              +--rw srv6-static:end-t_usp
-       |              |  +--rw srv6-static:lookup-table-ipv6    srv6-types:table-id
-       |              +--rw srv6-static:end-t_psp_usp
-       |              |  +--rw srv6-static:lookup-table-ipv6    srv6-types:table-id
-       |              +--rw srv6-static:end-x
-       |              |  +--rw srv6-static:protected?   boolean
-       |              |  +--rw srv6-static:paths
-       |              |     +--rw srv6-static:path* [path-index]
-       |              |        +--rw srv6-static:path-index           uint8
-       |              |        +--rw srv6-static:interface?           if:interface-ref
-       |              |        +--rw srv6-static:next-hop?            inet:ipv6-address
-       |              |        +--rw srv6-static:weight?              uint32
-       |              |        +--rw srv6-static:role?                enumeration
-       |              |        +--rw srv6-static:backup-path-index?   uint8
-       |              |        +--rw srv6-static:encap
-       |              |           +--rw srv6-static:out-sid* [sid]
-       |              |              +--rw srv6-static:sid    srv6-types:srv6-sid
-       |              +--rw srv6-static:end-x_psp
-       |              |  +--rw srv6-static:protected?   boolean
-       |              |  +--rw srv6-static:paths
-       |              |     +--rw srv6-static:path* [path-index]
-       |              |        +--rw srv6-static:path-index           uint8
-       |              |        +--rw srv6-static:interface?           if:interface-ref
-       |              |        +--rw srv6-static:next-hop?            inet:ipv6-address
-       |              |        +--rw srv6-static:weight?              uint32
-       |              |        +--rw srv6-static:role?                enumeration
-       |              |        +--rw srv6-static:backup-path-index?   uint8
-       |              |        +--rw srv6-static:encap
-       |              |           +--rw srv6-static:out-sid* [sid]
-       |              |              +--rw srv6-static:sid    srv6-types:srv6-sid
-       |              +--rw srv6-static:end-x_usp
-       |              |  +--rw srv6-static:protected?   boolean
-       |              |  +--rw srv6-static:paths
-       |              |     +--rw srv6-static:path* [path-index]
-       |              |        +--rw srv6-static:path-index           uint8
-       |              |        +--rw srv6-static:interface?           if:interface-ref
-       |              |        +--rw srv6-static:next-hop?            inet:ipv6-address
-       |              |        +--rw srv6-static:weight?              uint32
-       |              |        +--rw srv6-static:role?                enumeration
-       |              |        +--rw srv6-static:backup-path-index?   uint8
-       |              |        +--rw srv6-static:encap
-       |              |           +--rw srv6-static:out-sid* [sid]
-       |              |              +--rw srv6-static:sid    srv6-types:srv6-sid
-       |              +--rw srv6-static:end-x_psp_usp
-       |              |  +--rw srv6-static:protected?   boolean
-       |              |  +--rw srv6-static:paths
-       |              |     +--rw srv6-static:path* [path-index]
-       |              |        +--rw srv6-static:path-index           uint8
-       |              |        +--rw srv6-static:interface?           if:interface-ref
-       |              |        +--rw srv6-static:next-hop?            inet:ipv6-address
-       |              |        +--rw srv6-static:weight?              uint32
-       |              |        +--rw srv6-static:role?                enumeration
-       |              |        +--rw srv6-static:backup-path-index?   uint8
-       |              |        +--rw srv6-static:encap
-       |              |           +--rw srv6-static:out-sid* [sid]
-       |              |              +--rw srv6-static:sid    srv6-types:srv6-sid
-       |              +--rw srv6-static:end-b6-insert
-       |              |  +--rw srv6-static:policy-name    string
-       |              |  +--rw srv6-static:paths
-       |              |     +--rw srv6-static:path* [path-index]
-       |              |        +--rw srv6-static:path-index           uint8
-       |              |        +--rw srv6-static:interface?           if:interface-ref
-       |              |        +--rw srv6-static:next-hop?            inet:ipv6-address
-       |              |        +--rw srv6-static:weight?              uint32
-       |              |        +--rw srv6-static:role?                enumeration
-       |              |        +--rw srv6-static:backup-path-index?   uint8
-       |              |        +--rw srv6-static:encap
-       |              |           +--rw srv6-static:out-sid* [sid]
-       |              |              +--rw srv6-static:sid    srv6-types:srv6-sid
-       |              +--rw srv6-static:end-b6-encaps
-       |              |  +--rw srv6-static:policy-name       string
-       |              |  +--rw srv6-static:source-address    inet:ipv6-address
-       |              |  +--rw srv6-static:paths
-       |              |     +--rw srv6-static:path* [path-index]
-       |              |        +--rw srv6-static:path-index           uint8
-       |              |        +--rw srv6-static:interface?           if:interface-ref
-       |              |        +--rw srv6-static:next-hop?            inet:ipv6-address
-       |              |        +--rw srv6-static:weight?              uint32
-       |              |        +--rw srv6-static:role?                enumeration
-       |              |        +--rw srv6-static:backup-path-index?   uint8
-       |              |        +--rw srv6-static:encap
-       |              |           +--rw srv6-static:out-sid* [sid]
-       |              |              +--rw srv6-static:sid    srv6-types:srv6-sid
-       |              +--rw srv6-static:end-bm
-       |              |  +--rw srv6-static:policy-name    string
-       |              |  +--rw srv6-static:paths
-       |              |     +--rw srv6-static:path* [path-index]
-       |              |        +--rw srv6-static:path-index           uint8
-       |              |        +--rw srv6-static:interface?           if:interface-ref
-       |              |        +--rw srv6-static:next-hop?            inet:ip-address
-       |              |        +--rw srv6-static:weight?              uint32
-       |              |        +--rw srv6-static:role?                enumeration
-       |              |        +--rw srv6-static:backup-path-index?   uint8
-       |              |        +--rw srv6-static:encap
-       |              |           +--rw srv6-static:out-label* [label]
-       |              |              +--rw srv6-static:label    rt-types:mpls-label
-       |              +--rw srv6-static:end-dx6
-       |              |  +--rw srv6-static:paths
-       |              |     +--rw srv6-static:path* [path-index]
-       |              |        +--rw srv6-static:path-index           uint8
-       |              |        +--rw srv6-static:interface?           if:interface-ref
-       |              |        +--rw srv6-static:next-hop?            inet:ipv6-address
-       |              |        +--rw srv6-static:weight?              uint32
-       |              |        +--rw srv6-static:role?                enumeration
-       |              |        +--rw srv6-static:backup-path-index?   uint8
-       |              |        +--rw srv6-static:encap
-       |              |           +--rw srv6-static:out-sid* [sid]
-       |              |              +--rw srv6-static:sid    srv6-types:srv6-sid
-       |              +--rw srv6-static:end-dx4
-       |              |  +--rw srv6-static:paths
-       |              |     +--rw srv6-static:path* [path-index]
-       |              |        +--rw srv6-static:path-index           uint8
-       |              |        +--rw srv6-static:interface?           if:interface-ref
-       |              |        +--rw srv6-static:next-hop?            inet:ipv4-address
-       |              |        +--rw srv6-static:weight?              uint32
-       |              |        +--rw srv6-static:role?                enumeration
-       |              |        +--rw srv6-static:backup-path-index?   uint8
-       |              |        +--rw srv6-static:encap
-       |              |           +--rw srv6-static:out-sid* [sid]
-       |              |              +--rw srv6-static:sid    srv6-types:srv6-sid
-       |              +--rw srv6-static:end-dt6
-       |              |  +--rw srv6-static:lookup-table-ipv6    srv6-types:table-id
-       |              +--rw srv6-static:end-dt4
-       |              |  +--rw srv6-static:lookup-table-ipv4    srv6-types:table-id
-       |              +--rw srv6-static:end-dt46
-       |              |  +--rw srv6-static:lookup-table-ipv4    srv6-types:table-id
-       |              |  +--rw srv6-static:lookup-table-ipv6    srv6-types:table-id
-       |              +--rw srv6-static:end-dx2
-       |              |  +--rw srv6-static:paths
-       |              |     +--rw srv6-static:interface    if:interface-ref
-       |              +--rw srv6-static:end-otp
        +--ro node-capabilities
        |  +--ro end-behavior* [type]
        |  |  +--ro type         identityref
@@ -180,12 +36,12 @@ module: ietf-srv6-base
        |     +--ro supported    boolean
        +--ro local-sids
           +--ro counters
-          |  +--ro cnt3
+          |  +--ro cnt-3
           |     +--ro in-pkts?     yang:counter64
           |     +--ro in-octets?   yang:counter64
           +--ro local-sid* [sid]
              +--ro sid                  srv6-types:srv6-sid
-             +--ro locator-ref?         -> /rt:routing/srv6:srv6/locators/locator/name
+             +--ro locator?             -> /rt:routing/srv6:srv6/locators/locator/name
              +--ro is-reserved?         boolean
              +--ro end-behavior-type?   identityref
              +--ro alloc-type?          srv6-types:sid-alloc-type
@@ -198,7 +54,7 @@ module: ietf-srv6-base
              |  +--ro next-hop-type?   srv6-types:srv6-nexthop-type
              |  +--ro paths
              |     +--ro path* [path-index]
-             |        +--ro path-index         uint8
+             |        +--ro path-index    uint8
              |        +--ro l2
              |        |  +--ro interface?   if:interface-ref
              |        +--ro l3
@@ -215,14 +71,14 @@ module: ietf-srv6-base
              |              +--ro out-label* [label]
              |                 +--ro label    rt-types:mpls-label
              +--ro counters
-                +--ro cnt1
+                +--ro cnt-1
                    +--ro in-pkts?     yang:counter64
                    +--ro in-octets?   yang:counter64
 
   notifications:
     +---n srv6-locator-status-event
     |  +--ro operational-status?   srv6-types:srv6-status-type
-    |  +--ro locator-ref?          -> /rt:routing/srv6:srv6/locators/locator/name
+    |  +--ro locator?              -> /rt:routing/srv6:srv6/locators/locator/name
     +---n srv6-sid-collision-event
        +--ro sid?         srv6-types:srv6-sid
        +--ro existing
