@@ -205,6 +205,12 @@ module: ietf-srv6-static
              |  +--rw lookup-table-ipv4    srv6-types:table-id
              |  +--rw lookup-table-ipv6    srv6-types:table-id
              +--rw end-dx2
-             |  +--rw paths
+             |  +--rw path
              |     +--rw interface    if:interface-ref
+             +--rw end-dx2v
+             |  +--rw lookup-table-vlan    srv6-types:table-id
+             +--rw end-dt2u
+             |  +--rw lookup-table-l2-mac    srv6-types:table-id
+             +--rw end-dt2m
+             |  +--rw lookup-table-mac    srv6-types:table-id
              +--rw end-otp

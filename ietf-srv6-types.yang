@@ -805,11 +805,10 @@ module ietf-srv6-types {
       description "SF";
   }
 
-  // TODO: Rtg module ?
   typedef table-id {
     type uint32;
     description
-      "Routing Table Id";
+      "Routing/switching/bridging/VLAN Table Id";
   }
 
   typedef srv6-status-type {

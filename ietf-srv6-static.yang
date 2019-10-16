@@ -885,7 +885,7 @@ module ietf-srv6-static {
         description
           "This container is valid only when the user chooses
            End.DT4 behavior.";
-      }
+      } 
       description
         "Endpoint with decapsulation and specific
          IPv4 table lookup.
@@ -933,7 +933,8 @@ module ietf-srv6-static {
       }
     }
 
-   container end-dx2 {
+    /* EVPN END behavior types */
+    container end-dx2 {
       when "../end-behavior-type = 'End.DX2'" {
         description
           "This container is valid only when the user chooses
@@ -946,17 +947,17 @@ module ietf-srv6-static {
          Forward the resulting frame via OIF associated to the SID.
          The End.DX2 function is the L2VPN use-case";
 
-         container paths {
-           description "List of outgoing paths";
+        container path {
+          description "Outgoing path";
 
-            leaf interface {
-              type if:interface-ref;
-              mandatory true;
-             description "Layer-2 cross-connect to Out interface.";
-            }
+          leaf interface {
+            type if:interface-ref;
+            mandatory true;
+            description "Layer-2 cross-connect to Out interface.";
+          }
         }
     }
-    /* TODO
+    
     container end-dx2v {
       when "../end-behavior-type = 'End.DX2V'" {
         description
@@ -966,18 +967,22 @@ module ietf-srv6-static {
       description
         "Endpoint with decapsulation and specific VLAN
          L2 table lookup.
-         Pop the (outer) IPv6 header
-         and its extension headers lookup the exposed
-         inner VLANs in L2 table T forward via the
-         matched table entry.
+         Pop the (outer) IPv6 header and its extension headers.
+         Lookup the exposed inner VLANs in L2 table T.
+         Forward via the matched table entry.
          The End.DX2V is used for EVPN Flexible cross-connect
          use-cases";
-        leaf end-dx2v {
-          type empty;
-          description
-            "End_DX2V behavior";
-        }
+
+      leaf lookup-table-vlan {
+        type srv6-types:table-id;
+        mandatory true;
+        description
+          "VLAN lookup table. There could be multiple
+           vlan demux tables on the node – a DX2V SID
+           points to one vlan table";
+      }
     }
+
     container end-dt2u {
       when "../end-behavior-type = 'End.DT2U'" {
         description
@@ -992,18 +997,20 @@ module ietf-srv6-static {
          Lookup the exposed inner MAC DA in L2 table T.
          Forward via the matched T entry else to all L2OIF in T.
          The End.DT2U is used for EVPN Bridging unicast use cases";
-        leaf end-dt2u {
-          type empty;
-          description
-            "End_DT2U behavior";
-        }
+
+      leaf lookup-table-l2-mac {
+        type srv6-types:table-id;
+        mandatory true;
+        description "MAC L2 lookup table";
+      }
     }
+
     container end-dt2m {
       when "../end-behavior-type = 'End.DT2M'" {
         description
           "This container is valid only when the user chooses
            End.DT2M behavior.";
-      }
+      } 
       description
         "Endpoint with decapsulation and specific L2 table flooding.
          Pop the (outer) IPv6 header and its extension headers.
@@ -1011,13 +1018,18 @@ module ietf-srv6-static {
          Forward on all L2OIF excluding the one specified in Arg.FE2.
          The End.DT2M is used for EVPN Bridging BUM use case with
          ESI filtering capability.";
-        leaf end-dt2m {
-          type empty;
-          description
-            "End_DT2M behavior";
-        }
+
+      leaf lookup-table-mac {
+        type srv6-types:table-id;
+        mandatory true;
+        description "MAC lookup table";
+      }
+      /* TODO - Support for argument Arg.FE2 It is an argument specific
+         to EVPN ESI filtering and EVPN-ETREE used to exclude specific
+         OIF (or set of OIFs) from L2 table T flooding. */
     }
-*/
+
+    /* End of EVPN END behavior types */
 
     container end-otp {
       when "../end-behavior-type = 'End.OTP'" {

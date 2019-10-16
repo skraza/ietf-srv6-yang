@@ -54,7 +54,7 @@ module: ietf-srv6-base
              |  +--ro next-hop-type?   srv6-types:srv6-nexthop-type
              |  +--ro paths
              |     +--ro path* [path-index]
-             |        +--ro path-index    uint8
+             |        +--ro path-index         uint8
              |        +--ro l2
              |        |  +--ro interface?   if:interface-ref
              |        +--ro l3
