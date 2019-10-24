@@ -212,5 +212,9 @@ module: ietf-srv6-static
              +--rw end-dt2u
              |  +--rw lookup-table-l2-mac    srv6-types:table-id
              +--rw end-dt2m
-             |  +--rw lookup-table-mac    srv6-types:table-id
+             |  +--rw flooding-table-l2-mac    srv6-types:table-id
+             |  +--rw paths
+             |     +--rw path* [path-index]
+             |        +--rw path-index    uint8
+             |        +--rw interface?    if:interface-ref
              +--rw end-otp

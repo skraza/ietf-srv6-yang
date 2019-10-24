@@ -238,6 +238,30 @@ module ietf-srv6-static {
       }
    }
 
+   grouping multi-paths-v6-BUM {
+    description
+      "Multipath grouping for EVPN bridging BUM use case";
+
+    container paths {
+      description
+        "List of outgoing paths for flooding";
+      list path {
+        key path-index;
+        description "The list of paths associated with the SID";
+
+        leaf path-index {
+          type uint8;
+          description "Index of the path";
+        }
+
+        leaf interface {
+          type if:interface-ref;
+          description "The outgoing interface for flooding";
+        }
+      }
+    }
+  }
+
   grouping srv6-sid-config {
     description
       "Configuration parameters relating to SRv6 sid.";
@@ -746,10 +770,11 @@ module ietf-srv6-static {
     }
     
     container end-b6-insert {
-      when "../end-behavior-type = 'End.B6.Insert'" {
+      when "../end-behavior-type = 'End.B6.Insert' or 
+            ../end-behavior-type = 'End.B6.Insert.Red'" {
         description
           "This container is valid only when the user chooses
-           End.B6.Insert behavior.";
+           End.B6.Insert or End.B6.Insert.Red behavior.";
       }
       description
         "Endpoint bound to an SRv6 Policy.
@@ -769,10 +794,11 @@ module ietf-srv6-static {
     }
 
     container end-b6-encaps {
-      when "../end-behavior-type = 'End.B6.Encaps'" {
+      when "../end-behavior-type = 'End.B6.Encaps' or
+            ../end-behavior-type = 'End.B6.Encaps.Red'" {
         description
           "This container is valid only when the user chooses
-           End_B6_Encaps behavior.";
+           End.B6.Encaps or End.B6.Encaps.Red behavior.";
       }
       description
         "This is a variation of the End.B6 behavior where
@@ -1019,12 +1045,15 @@ module ietf-srv6-static {
          The End.DT2M is used for EVPN Bridging BUM use case with
          ESI filtering capability.";
 
-      leaf lookup-table-mac {
+      leaf flooding-table-l2-mac {
         type srv6-types:table-id;
         mandatory true;
-        description "MAC lookup table";
+        description "Flooding lookup table";
       }
-      /* TODO - Support for argument Arg.FE2 It is an argument specific
+
+      uses multi-paths-v6-BUM;
+
+      /* TODO - Support for argument Arg.FE2. It is an argument specific
          to EVPN ESI filtering and EVPN-ETREE used to exclude specific
          OIF (or set of OIFs) from L2 table T flooding. */
     }
