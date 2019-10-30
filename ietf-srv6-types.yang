@@ -68,6 +68,15 @@ module ietf-srv6-types {
      // RFC Editor: replace XXXX with actual RFC number and remove
      // this note
 
+  revision 2019-10-30 {
+    description
+      "Renaming of some types";
+    reference
+      "RFC XXXX: YANG Data Model for SRv6";
+     // RFC Editor: replace XXXX with actual RFC number and remove
+     // this note
+  }
+
   revision 2019-07-08 {
     description
       "Alignment with latest SRv6 network programming";
@@ -76,7 +85,7 @@ module ietf-srv6-types {
      // RFC Editor: replace XXXX with actual RFC number and remove
      // this note
   }
-  
+
   revision 2018-10-22 {
     description
       "Initial revision.";
@@ -88,10 +97,12 @@ module ietf-srv6-types {
 
   identity srv6-endpoint-type {
       description
-        "Base identity from which specific SRv6 Endpoint types are derived.";
+        "Base identity from which specific SRv6 Endpoint types are
+	derived.";
   }
 
-  /* Endpoints defined under draft-filsfils-spring-srv6-network-programming */
+  /* Endpoints defined under draft-ietf-spring-
+    * srv6-network-programming */
 
   identity End {
     base srv6-endpoint-type;
@@ -217,7 +228,7 @@ module ietf-srv6-types {
           "draft-ietf-spring-srv6-network-programming-01";
     // RFC Editor: replace with actual RFC number and remove this note
   }
-   
+
   identity End.B6.Encaps {
     base srv6-endpoint-type;
     description
@@ -328,12 +339,21 @@ module ietf-srv6-types {
     // RFC Editor: replace with actual RFC number and remove this note
    }
 
+   identity End.OP {
+     base srv6-endpoint-type;
+     description
+          "Endpoint for OAM operation of punt";
+     reference
+          "draft-ietf-6man-spring-srv6-oam-00";
+    // RFC Editor: replace with actual RFC number and remove this note
+   }
+
    identity End.OTP {
      base srv6-endpoint-type;
      description
           "Endpoint for OAM operation of timestamp and punt";
      reference
-          "draft-ietf-spring-srv6-network-programming-01";
+          "draft-ietf-6man-spring-srv6-oam-00";
     // RFC Editor: replace with actual RFC number and remove this note
    }
 
@@ -345,11 +365,12 @@ module ietf-srv6-types {
           "draft-ietf-spring-srv6-network-programming-01";
     // RFC Editor: replace with actual RFC number and remove this note
    }
-
+   
   identity End.B6.Insert.Red {
      base srv6-endpoint-type;
      description
-          "This is a reduced insert variation of the End.B6.Insert behavior";
+          "This is a reduced insert variation of the End.B6.Insert
+	  behavior";
      reference
           "draft-ietf-spring-srv6-network-programming-01";
     // RFC Editor: replace with actual RFC number and remove this note
@@ -358,7 +379,8 @@ module ietf-srv6-types {
    identity End.B6.Encaps.Red {
      base srv6-endpoint-type;
      description
-          "This is a reduced encap variation of the End.B6.Encap behavior.";
+          "This is a reduced encap variation of the End.B6.Encap
+	  behavior.";
      reference
           "draft-ietf-spring-srv6-network-programming-01";
     // RFC Editor: replace with actual RFC number and remove this note
@@ -454,7 +476,7 @@ module ietf-srv6-types {
      base srv6-endpoint-type;
      description
           "Endpoint with specific IPv6 table lookup
-	   (variant: PSP and USD).";
+           (variant: PSP and USD).";
      reference
           "draft-ietf-spring-srv6-network-programming-01";
     // RFC Editor: replace with actual RFC number and remove this note
@@ -464,7 +486,7 @@ module ietf-srv6-types {
      base srv6-endpoint-type;
      description
           "Endpoint with specific IPv6 table lookup
-	   (variant: USP and USD).";
+           (variant: USP and USD).";
      reference
           "draft-ietf-spring-srv6-network-programming-01";
     // RFC Editor: replace with actual RFC number and remove this note
@@ -474,7 +496,7 @@ module ietf-srv6-types {
      base srv6-endpoint-type;
      description
           "Endpoint with specific IPv6 table lookup
-	   (variant: PSP and USP and USD).";
+           (variant: PSP and USP and USD).";
      reference
           "draft-ietf-spring-srv6-network-programming-01";
     // RFC Editor: replace with actual RFC number and remove this note
@@ -528,34 +550,43 @@ module ietf-srv6-types {
      description
          "DMM End.MAP";
       reference
-          "draft-ietf-dmm-srv6-mobile-uplane-01";
+          "draft-ietf-dmm-srv6-mobile-uplane-05";
     // RFC Editor: replace with actual RFC number and remove this note
    }
 
-   identity End.M.GTP6.UP {
+   identity End.M.GTP6.D {
      base srv6-endpoint-type;
      description
-         "DMM End.M.GTP6.UP";
+         "DMM End.M.GTP6.D";
       reference
-          "draft-ietf-dmm-srv6-mobile-uplane-01";
+          "draft-ietf-dmm-srv6-mobile-uplane-05";
     // RFC Editor: replace with actual RFC number and remove this note
    }
 
-   identity End.M.GTP6.DN {
+   identity End.M.GTP6.E {
      base srv6-endpoint-type;
      description
-         "DMM End.M.GTP6.DN";
+         "DMM End.M.GTP6.E";
       reference
-          "draft-ietf-dmm-srv6-mobile-uplane-01";
+          "draft-ietf-dmm-srv6-mobile-uplane-05";
     // RFC Editor: replace with actual RFC number and remove this note
    }
 
-   identity End.M.GTP4.DN {
+   identity End.M.GTP4.D {
      base srv6-endpoint-type;
      description
-         "DMM End.M.GTP4.DN";
+         "DMM End.M.GTP4.D";
       reference
-          "draft-ietf-dmm-srv6-mobile-uplane-01";
+          "draft-ietf-dmm-srv6-mobile-uplane-05";
+    // RFC Editor: replace with actual RFC number and remove this note
+    }
+
+   identity End.M.GTP4.E {
+     base srv6-endpoint-type;
+     description
+         "DMM End.M.GTP4.E";
+      reference
+          "draft-ietf-dmm-srv6-mobile-uplane-05";
     // RFC Editor: replace with actual RFC number and remove this note
    }
 
@@ -564,7 +595,7 @@ module ietf-srv6-types {
      description
          "DMM End.Limit";
       reference
-          "draft-ietf-dmm-srv6-mobile-uplane-01";
+          "draft-ietf-dmm-srv6-mobile-uplane-05";
     // RFC Editor: replace with actual RFC number and remove this note
    }
 
@@ -594,7 +625,8 @@ module ietf-srv6-types {
    identity T.Insert.Red {
      base srv6-transit-type;
      description
-         "Transit rule T.Insert.Red with reduced insertion of an SRv6 policy";
+         "Transit rule T.Insert.Red with reduced insertion of an
+	 SRv6 policy";
      reference
           "draft-ietf-spring-srv6-network-programming-01";
     // RFC Editor: replace with actual RFC number and remove this note
@@ -612,7 +644,8 @@ module ietf-srv6-types {
    identity T.Encaps.Red {
      base srv6-transit-type;
      description
-         "Transit rule T.Encaps.Red with reduced encap of an SRv6 policy";
+         "Transit rule T.Encaps.Red with reduced encap of an
+	 SRv6 policy";
      reference
           "draft-ietf-spring-srv6-network-programming-01";
     // RFC Editor: replace with actual RFC number and remove this note
@@ -638,7 +671,8 @@ module ietf-srv6-types {
 
   identity srv6-security-type {
      description
-        "Base identity from which SRv6 Security rule types are derived.";
+        "Base identity from which SRv6 Security rule types are
+	derived.";
   }
 
   identity SEC-1 {
@@ -658,7 +692,7 @@ module ietf-srv6-types {
           "draft-ietf-spring-srv6-network-programming-01";
     // RFC Editor: replace with actual RFC number and remove this note
   }
-   
+
   identity SEC-3 {
      base srv6-security-type;
      description
@@ -667,7 +701,7 @@ module ietf-srv6-types {
           "draft-ietf-spring-srv6-network-programming-01";
     // RFC Editor: replace with actual RFC number and remove this note
   }
-   
+
   identity srv6-counter-type {
      description
         "Base identity from which SRv6 counter types are derived.";
@@ -706,36 +740,18 @@ module ietf-srv6-types {
       "This type defines a SID value in SRv6";
   }
 
-  typedef srv6-func-opcode {
+  typedef srv6-func-value {
       type uint32;
       description
-        "This is a typedef for SID FUNC's opcode type";
+        "This is a typedef for SID's FUNC value";
   }
 
-  typedef srv6-func-opcode-reserved {
-      type uint32 {
-        range "1 .. 63";
-      }
-
-      description
-        "This is a typedef for SID FUNC's reserved opcode type";
-  }
-
-  typedef srv6-func-opcode-unreserved {
-      type uint32 {
-        range "64 .. max";
-      }
-
-      description
-        "This is a typedef for SID FUNC's allocatable (unreserved) opcode type";
-  }
-
-  typedef srv6-func-opcode-reserved-type {
+  typedef srv6-func-value-reserved-type {
       type enumeration {
-        enum invalid {  value 0; description "Invalid opcode"; }
+        enum invalid {  value 0; description "Invalid function value"; }
       }
 
-      description "SRv6 SID FUNC Reserved Opcodes";
+      description "SRv6 SID's FUNC Reserved values";
   }
 
   typedef srv6-locator-len {
